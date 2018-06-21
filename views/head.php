@@ -29,16 +29,6 @@ $item = $oo->get($uu->id);
 $title = $item["name1"];
 $nav = $oo->nav($uu->ids);
 
-if($uu->id)
-{
-	// if linked from outside, dont show menu
-	$is_leaf = empty($oo->children_ids_nav($uu->id));
-	$internal = (substr($_SERVER['HTTP_REFERER'], 0, strlen($host)) === $host);
-
-	if(!$is_leaf && $internal)
-		$show_menu = true;
-}
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -46,9 +36,9 @@ if($uu->id)
 		<title><? echo $title; ?></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" href="<? echo $host; ?>static/fonts/beeb/stylesheet.css">
 		<link rel="stylesheet" href="<? echo $host; ?>static/css/global.css">
-		<link rel="stylesheet" href="<? echo $host; ?>static/css/sf-display.css">
 		<link rel="apple-touch-icon" href="<? echo $host; ?>media/png/touchicon.png" />
-		<script src="static/js/analytics.js"></script>
+		<!-- <script src="static/js/analytics.js"></script> -->
 	</head>
 <body>

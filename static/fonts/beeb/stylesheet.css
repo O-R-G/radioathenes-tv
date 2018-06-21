@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'Beeb Mode One';
+    src: url('BeebModeOne.woff2') format('woff2'),
+        url('BeebModeOne.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
