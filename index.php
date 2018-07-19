@@ -11,6 +11,11 @@ $view = "views/";
 
 // show the things
 require_once("views/head.php");
-require_once("views/home.php");
+require_once("views/utils.php");
+if ($uri[1] == "events") {
+  require_once("views/event.php");
+} else {
+  require_once("views/home.php");
+}
 require_once("views/foot.php");
 ?>
