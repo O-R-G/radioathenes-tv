@@ -14,7 +14,7 @@
   <?foreach($events as $event) {
     ?>
     <li><div class="<?= $event['id']; ?> event-button click">
-      <a href="/events/<?= $event['url'] ?>"><?= $event['name1']; ?></a>
+      <a href="/events/<?= $event['url'] ?>"><?= $event['id']; ?> <?= $event['name1']; ?></a>
     </div></li>
       <?
   } ?>
@@ -190,7 +190,7 @@
       loopIdx = idx;
       events[loopIdx%events.length].classList.add('show-media');
       var id = parseInt(events[loopIdx%events.length].classList[0]);
-      activeChannel.innerHTML = eventNames[eventIds.indexOf(id)];
+      activeChannel.innerHTML = id;
       activeChannel.classList.remove('transparent');
       showing.push(events[(loopIdx)%events.length]);
 

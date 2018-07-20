@@ -13,12 +13,12 @@
 </div>
 
 <div class="left-container">
-  <div id="active-channel" class="transparent click"><?= $item['name1']; ?></div>
+  <div id="active-channel" class="transparent click"><?= $item['id']; ?></div>
   <ul id="picker">
   <?foreach($events as $event) {
     ?>
     <li><div class="<?= $event['id']; ?> event-button click">
-      <a href="/events/<?= $event['url'] ?>"><?= $event['name1']; ?></a>
+      <a href="/events/<?= $event['url'] ?>"><?= $event['id']; ?> <?= $event['name1']; ?></a>
     </div></li>
       <?
   } ?>
@@ -105,7 +105,7 @@
       }
     }
   }
-  
+
   // goes to an index with noise transition
   function gotoIndex(idx) {
     if (loopIdx != -1) {
