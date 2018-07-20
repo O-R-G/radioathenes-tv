@@ -52,6 +52,7 @@
 </div>
 
 <script>
+(function() {
   var showing = [];
   var loopIdx = -1; // index of the looper
 
@@ -92,6 +93,19 @@
     }
   }
 
+  document.getElementById('container').onclick = function() {
+    var captions = document.getElementsByClassName('caption-container');
+    if (captions[0].style.display == 'none') {
+      for (var i = 0; i < captions.length; i++) {
+        captions[i].style.display = '';
+      }
+    } else {
+      for (var i = 0; i < captions.length; i++) {
+        captions[i].style.display = 'none';
+      }
+    }
+  }
+  
   // goes to an index with noise transition
   function gotoIndex(idx) {
     if (loopIdx != -1) {
@@ -117,4 +131,5 @@
   var looper = setInterval(function() {
     gotoIndex(loopIdx+1);
   }, 5000);
+})();
 </script>

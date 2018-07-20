@@ -36,6 +36,7 @@
 </div>
 
 <script>
+(function() {
   var eventIds = [<?foreach($events as $event) { echo $event['id'] . ','; }?>]; // array of event ids in chronological order
   var eventNames = [<?foreach($events as $event) { echo '"' . $event['name1'] . '", '; }?>]; // array of event names
   var eventIdx = 0; // keeps track of the index of the next event submitted to be loaded
@@ -131,7 +132,7 @@
   }
 
   // queues all the images to be loaded
-  for (var i = eventIdx; i < eventIds.length; i++) {
+  for (var i = eventIdx; i < 1; i++) {
     loadQueue.push(eventIds[eventIdx++]);
   }
   loadNext();
@@ -157,6 +158,19 @@
         document.getElementById('picker').style.display = 'none';
     } else {
       document.getElementById('picker').style.display = 'block';
+    }
+  }
+
+  document.getElementById('container').onclick = function() {
+    var captions = document.getElementsByClassName('caption-container');
+    if (captions[0].style.display == 'none') {
+      for (var i = 0; i < captions.length; i++) {
+        captions[i].style.display = '';
+      }
+    } else {
+      for (var i = 0; i < captions.length; i++) {
+        captions[i].style.display = 'none';
+      }
     }
   }
 
@@ -187,4 +201,5 @@
   var looper = setInterval(function() {
     gotoIndex(loopIdx+1);
   }, 5000);
+})();
 </script>
