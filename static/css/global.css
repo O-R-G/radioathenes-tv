@@ -47,9 +47,30 @@ img {
   filter: grayscale(1);
 }
 
-.fullscreen {
-	/* width: auto; */
-	height: auto;
+.message-full {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  color: #fff;
+  z-index: 100;
+}
+
+.message-full div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  max-width: 50%;
+
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .img-container {
@@ -116,6 +137,8 @@ ul:first-child {
   height:100%;
   object-fit:contain;
   background-color: black;
+
+  /* cursor: pointer; */
 }
 
 #fullscreen:-ms-fullscreen {
@@ -137,6 +160,11 @@ ul:first-child {
 #picker {
   display: none;
   padding-top: 20px;
+  margin-left: 2em;
+}
+.event-button {
+  margin-left: 0em;
+  text-indent: -2em;
 }
 .click {
   cursor: pointer;
@@ -151,6 +179,7 @@ ul:first-child {
   height: 100%;
   opacity: 0;
   position: absolute;
+  /* display: none; */
 }
 .media img {
   width: 100%;
@@ -171,7 +200,7 @@ ul:first-child {
 
 .caption {
   max-width: 80%;
-  color: white;
+  /* color: #fff; */
   margin-bottom:50px;
   text-align: center;
 
@@ -179,22 +208,53 @@ ul:first-child {
   line-height: 28px;
 }
 .caption span {
-  background-color: black;
+  color: #fff;
+  background-color: #000;
+  cursor: pointer;
 }
 
+.caption span:hover {
+  color: #000;
+  background-color: #fff;
+}
+.system-message {
+  color: #fff;
+  background-color: #00f;
+}
+.system-message:hover {
+  color: #00f;
+  background-color: #fff;
+}
 .show-media {
+  /* display: block; */
   opacity: 1;
+  z-index: 50;
   transition: opacity 0.5s;
+}
+
+#cc {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 50;
+  display: none;
+  cursor: pointer;
 }
 #noise img {
   object-fit: fill;
 }
 #noise {
   z-index: 50;
+  pointer-events: none;
 }
 
 #rotate-notice {
   display: none;
+}
+
+#center-notice {
+  display: none;
+  pointer-events: none;
 }
 
 @media screen and (max-width: 992px){
@@ -213,29 +273,6 @@ ul:first-child {
 @media screen and (max-width: 640px) {
   #rotate-notice {
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-
-    position: fixed;
-    top: 0;
-    left: 0;
-
-    width: 100vw;
-    height: 100vh;
-
-    background: #000;
-    color: #fff;
-    z-index: 100;
-  }
-
-  #rotate-notice div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 50%;
-
-    text-align: center;
-    text-transform: uppercase;
   }
 }
 

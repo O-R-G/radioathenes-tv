@@ -2,19 +2,28 @@
   $events = $oo->children(getEventsID($oo, $root));
   usort($events, "date_sort");
 ?>
-<div id="rotate-notice">
-  <div>
+<div id="rotate-notice" class="message-full system-message">
+  <div class="">
     Please Rotate Your Device.
   </div>
 </div>
+<div id="center-notice" class="message-full">
+  <div>
+    <span id="center-message" class="system-message">
+    </span>
+  </div>
+</div>
+<div id="cc" class="system-message">
+  CC
+</div>
 
 <div class="left-container">
-  <div id="active-channel" class="transparent click"></div>
+  <div id="active-channel" class="transparent click"><span class="system-message"></span></div>
   <ul id="picker">
   <?foreach($events as $event) {
     ?>
     <li><div class="<?= $event['id']; ?> event-button click">
-      <a href="/events/<?= $event['url'] ?>"><?= $event['id']; ?> <?= $event['name1']; ?></a>
+      <a href="/events/<?= $event['url'] ?>" class="system-message"><?= $event['id']; ?> <?= $event['name1']; ?></a>
     </div></li>
       <?
   } ?>
@@ -35,6 +44,7 @@
   </div>
 </div>
 
+<script src="/static/js/global.js"></script>
 <script>
 (function() {
   var eventIds = [<?foreach($events as $event) { echo $event['id'] . ','; }?>]; // array of event ids in chronological order
@@ -47,34 +57,34 @@
   var showing = [];
   var loopIdx = -1; // index of the looper
 
-  var events = document.getElementsByClassName('event');
-  var noise = document.getElementById('noise');
+  // var events = document.getElementsByClassName('event');
+  // var noise = document.getElementById('noise');
   // var eventButtons = document.getElementsByClassName('event-button');
-  var activeChannel = document.getElementById('active-channel');
+  // var activeChannel = document.getElementById('active-channel');
 
   // picks a random noise gif based on weighted order (1/2, 1/4, 1/8, etc…)
-  function pickWeightedRandomNoise() {
-    var noiseGifs = noise.getElementsByTagName('img');
-    var n = noiseGifs.length;
-
-    // generate a number (0, 2^(n-1)]
-    var random = Math.random()*Math.pow(2,(n-1));
-    var choiceIdx = -1;
-    for (var i = 1; i < n; i++) {
-      // if between (2^(n-i-1)-2^(n-i)], then it is index i-1
-      if (Math.pow(2,(n-i-1)) < random && random <= Math.pow(2, (n-i))) {
-        choiceIdx = i-1;
-      }
-    }
-    if (choiceIdx == -1) {
-      choiceIdx = n-1;
-    }
-
-    for (var i = 0; i < n; i++) {
-      noiseGifs[i].classList.add('hidden');
-    }
-    noiseGifs[choiceIdx].classList.remove('hidden');
-  }
+  // function pickWeightedRandomNoise() {
+  //   var noiseGifs = noise.getElementsByTagName('img');
+  //   var n = noiseGifs.length;
+  //
+  //   // generate a number (0, 2^(n-1)]
+  //   var random = Math.random()*Math.pow(2,(n-1));
+  //   var choiceIdx = -1;
+  //   for (var i = 1; i < n; i++) {
+  //     // if between (2^(n-i-1)-2^(n-i)], then it is index i-1
+  //     if (Math.pow(2,(n-i-1)) < random && random <= Math.pow(2, (n-i))) {
+  //       choiceIdx = i-1;
+  //     }
+  //   }
+  //   if (choiceIdx == -1) {
+  //     choiceIdx = n-1;
+  //   }
+  //
+  //   for (var i = 0; i < n; i++) {
+  //     noiseGifs[i].classList.add('hidden');
+  //   }
+  //   noiseGifs[choiceIdx].classList.remove('hidden');
+  // }
 
   // loader
   function loadNext() {
@@ -107,6 +117,7 @@
 
                 var newCaptionDiv = document.createElement("div");
                 newCaptionDiv.classList.add('caption');
+                newCaptionDiv.onclick = hideShowCaptions;
                 newCaptionContainerDiv.appendChild(newCaptionDiv);
 
                 var newCaptionSpanDiv = document.createElement("span");
@@ -153,24 +164,35 @@
   //   }
   // }
 
-  activeChannel.onclick = function() {
-    if (document.getElementById('picker').style.display == 'block') {
-        document.getElementById('picker').style.display = 'none';
-    } else {
-      document.getElementById('picker').style.display = 'block';
-    }
-  }
+  // activeChannel.onclick = function() {
+  //   if (document.getElementById('picker').style.display == 'block') {
+  //       document.getElementById('picker').style.display = 'none';
+  //   } else {
+  //     document.getElementById('picker').style.display = 'block';
+  //   }
+  // }
+  //
+  // document.getElementById('container').onclick = playPause;
+  // document.getElementById('container').getElementsByTagName('img').onclick = playPause;
 
-  document.getElementById('container').onclick = function() {
-    var captions = document.getElementsByClassName('caption-container');
-    if (captions[0].style.display == 'none') {
-      for (var i = 0; i < captions.length; i++) {
-        captions[i].style.display = '';
-      }
+  // var captions = document.getElementsByClassName('caption');
+  // for (var i = 0; i < captions.length; i++) {
+  //   captions[i].onclick = hideShowCaptions;
+  // }
+
+  function playPause() {
+    if (looper) {
+      clearInterval(looper);
+      looper = null;
+      showCenterMessage('PAUSED', true);
     } else {
-      for (var i = 0; i < captions.length; i++) {
-        captions[i].style.display = 'none';
-      }
+      showCenterMessage('PLAY', false);
+      setTimeout(hideCenterMessage, 2000);
+
+      gotoIndex(loopIdx+1);
+      looper = setInterval(function() {
+        gotoIndex(loopIdx+1);
+      }, 5000);
     }
   }
 
@@ -190,12 +212,14 @@
       loopIdx = idx;
       events[loopIdx%events.length].classList.add('show-media');
       var id = parseInt(events[loopIdx%events.length].classList[0]);
-      activeChannel.innerHTML = id;
+      activeChannel.innerHTML = '<span class="system-message">' + id + '</span>';
       activeChannel.classList.remove('transparent');
       showing.push(events[(loopIdx)%events.length]);
 
     }, Math.random()*1000 + 250);
   }
+
+  document.getElementById('container').onclick = playPause;
 
   // runs the loop
   var looper = setInterval(function() {

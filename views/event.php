@@ -6,23 +6,32 @@
   $media = $oo->media($item['id']);
 
 ?>
-<div id="rotate-notice">
+<div id="rotate-notice" class="message-full">
   <div>
     Please Rotate Your Device.
   </div>
 </div>
+<div id="center-notice" class="message-full">
+  <div>
+    <span id="center-message" class="system-message">
+    </span>
+  </div>
+</div>
+<div id="cc" class="system-message">
+  CC
+</div>
 
 <div class="left-container">
-  <div id="active-channel" class="transparent click"><?= $item['id']; ?></div>
+  <div id="active-channel" class="transparent click"><span class="system-message"><?= $item['id']; ?></span></div>
   <ul id="picker">
   <?foreach($events as $event) {
     ?>
     <li><div class="<?= $event['id']; ?> event-button click">
-      <a href="/events/<?= $event['url'] ?>"><?= $event['id']; ?> <?= $event['name1']; ?></a>
+      <a href="/events/<?= $event['url'] ?>" class="system-message"><?= $event['id']; ?> <?= $event['name1']; ?></a>
     </div></li>
       <?
   } ?>
-  <li><a href="/">*</a></li>
+  <li class="event-button click"><a href="/" class="system-message">*</a></li>
   </ul>
 </div>
 
@@ -51,60 +60,70 @@
   </div>
 </div>
 
+<script src="/static/js/global.js"></script>
 <script>
 (function() {
   var showing = [];
   var loopIdx = -1; // index of the looper
 
-  var events = document.getElementsByClassName('event');
-  var noise = document.getElementById('noise');
-  var activeChannel = document.getElementById('active-channel');
+  // var events = document.getElementsByClassName('event');
+  // var noise = document.getElementById('noise');
+  // var activeChannel = document.getElementById('active-channel');
   var eventName = activeChannel.innerHTML;
 
   // picks a random noise gif based on weighted order (1/2, 1/4, 1/8, etc…)
-  function pickWeightedRandomNoise() {
-    var noiseGifs = noise.getElementsByTagName('img');
-    var n = noiseGifs.length;
+  // function pickWeightedRandomNoise() {
+  //   var noiseGifs = noise.getElementsByTagName('img');
+  //   var n = noiseGifs.length;
+  //
+  //   // generate a number (0, 2^(n-1)]
+  //   var random = Math.random()*Math.pow(2,(n-1));
+  //   var choiceIdx = -1;
+  //   for (var i = 1; i < n; i++) {
+  //     // if between (2^(n-i-1)-2^(n-i)], then it is index i-1
+  //     if (Math.pow(2,(n-i-1)) < random && random <= Math.pow(2, (n-i))) {
+  //       choiceIdx = i-1;
+  //     }
+  //   }
+  //   if (choiceIdx == -1) {
+  //     choiceIdx = n-1;
+  //   }
+  //
+  //   for (var i = 0; i < n; i++) {
+  //     noiseGifs[i].classList.add('hidden');
+  //   }
+  //   noiseGifs[choiceIdx].classList.remove('hidden');
+  // }
 
-    // generate a number (0, 2^(n-1)]
-    var random = Math.random()*Math.pow(2,(n-1));
-    var choiceIdx = -1;
-    for (var i = 1; i < n; i++) {
-      // if between (2^(n-i-1)-2^(n-i)], then it is index i-1
-      if (Math.pow(2,(n-i-1)) < random && random <= Math.pow(2, (n-i))) {
-        choiceIdx = i-1;
-      }
-    }
-    if (choiceIdx == -1) {
-      choiceIdx = n-1;
-    }
+  // activeChannel.onclick = function() {
+  //   if (document.getElementById('picker').style.display == 'block') {
+  //       document.getElementById('picker').style.display = 'none';
+  //   } else {
+  //     document.getElementById('picker').style.display = 'block';
+  //   }
+  // }
 
-    for (var i = 0; i < n; i++) {
-      noiseGifs[i].classList.add('hidden');
-    }
-    noiseGifs[choiceIdx].classList.remove('hidden');
-  }
-
-  activeChannel.onclick = function() {
-    if (document.getElementById('picker').style.display == 'block') {
-        document.getElementById('picker').style.display = 'none';
+  function playPause() {
+    if (looper) {
+      clearInterval(looper);
+      looper = null;
+      showCenterMessage('PAUSED', true);
     } else {
-      document.getElementById('picker').style.display = 'block';
+      showCenterMessage('PLAY', false);
+      setTimeout(hideCenterMessage, 1000);
+
+      gotoIndex(loopIdx+1);
+      looper = setInterval(function() {
+        gotoIndex(loopIdx+1);
+      }, 5000);
     }
   }
 
-  document.getElementById('container').onclick = function() {
-    var captions = document.getElementsByClassName('caption-container');
-    if (captions[0].style.display == 'none') {
-      for (var i = 0; i < captions.length; i++) {
-        captions[i].style.display = '';
-      }
-    } else {
-      for (var i = 0; i < captions.length; i++) {
-        captions[i].style.display = 'none';
-      }
-    }
+  var captions = document.getElementsByClassName('caption')
+  for (var i = 0; i < captions.length; i++) {
+    captions[i].onclick = hideShowCaptions;
   }
+  document.getElementById('container').onclick = playPause;
 
   // goes to an index with noise transition
   function gotoIndex(idx) {
@@ -131,5 +150,8 @@
   var looper = setInterval(function() {
     gotoIndex(loopIdx+1);
   }, 5000);
+
+  showCenterMessage('Channel ' + activeChannel.getElementsByTagName('span')[0].innerHTML, false);
+  setTimeout(hideCenterMessage, 5250);
 })();
 </script>
