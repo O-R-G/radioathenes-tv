@@ -17,13 +17,13 @@
     </span>
   </div>
 </div>
-<div id="cc" class="system-message transparent hideable">
+<div id="cc" class="transparent hideable">
   CC
 </div>
 
 <div class="left-container">
-  <div id="active-channel" class="transparent click hideable"><span class="system-message"><?= $item['id']; ?></span></div>
-  <div id="blue" class="transparent hideable"></div>
+  <div id="active-channel" class=" click "><span class="system-message"><?= $item['id']; ?></span></div>
+  <div id="blue" class=""></div>
   <ul id="picker">
   <?foreach($events as $event) {
     ?>

@@ -239,16 +239,24 @@ ul:first-child {
   z-index: 50;
   /* display: none; */
   cursor: pointer;
+
+  color: #fff;
+  background-color: #000;
+}
+
+#cc:hover {
+  color: #000;
+  background-color: #fff;
 }
 
 #cc.invert {
-  color: #00f;
+  color: #000;
   background-color: #fff;
 }
 
 #cc.invert:hover {
   color: #fff;
-  background-color: #00f;
+  background-color: #000;
 }
 #noise img {
   object-fit: fill;
