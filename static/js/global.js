@@ -34,7 +34,7 @@ function hideShowCaptions(e) {
     showCenterMessage("SHOW CAPTIONS", false);
     setTimeout(hideCenterMessage, 2000);
 
-    document.getElementById('cc').style.display = 'none';
+    document.getElementById('cc').classList.remove('invert');
     for (var i = 0; i < captions.length; i++) {
       captions[i].style.display = '';
     }
@@ -42,7 +42,7 @@ function hideShowCaptions(e) {
     showCenterMessage("HIDE CAPTIONS", false);
     setTimeout(hideCenterMessage, 2000);
 
-    document.getElementById('cc').style.display = 'block';
+    document.getElementById('cc').classList.add('invert');
     for (var i = 0; i < captions.length; i++) {
       captions[i].style.display = 'none';
     }

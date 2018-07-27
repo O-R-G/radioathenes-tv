@@ -2,7 +2,7 @@
   $events = $oo->children(getEventsID($oo, $root));
   usort($events, "date_sort");
 ?>
-<div id="rotate-notice" class="message-full system-message">
+<div id="rotate-notice" class="message-full">
   <div class="">
     Please Rotate Your Device.
   </div>
@@ -13,12 +13,13 @@
     </span>
   </div>
 </div>
-<div id="cc" class="system-message">
+<div id="cc" class="system-message transparent hideable">
   CC
 </div>
 
 <div class="left-container">
-  <div id="active-channel" class="transparent click"><span class="system-message"></span></div>
+  <div id="active-channel" class="transparent click hideable"><span class="system-message"></span></div>
+  <div id="blue" class="transparent hideable"></div>
   <ul id="picker">
   <?foreach($events as $event) {
     ?>
@@ -117,7 +118,7 @@
 
                 var newCaptionDiv = document.createElement("div");
                 newCaptionDiv.classList.add('caption');
-                newCaptionDiv.onclick = hideShowCaptions;
+                // newCaptionDiv.onclick = hideShowCaptions;
                 newCaptionContainerDiv.appendChild(newCaptionDiv);
 
                 var newCaptionSpanDiv = document.createElement("span");
@@ -203,7 +204,7 @@
         e.classList.remove('show-media');
       });
       showing = [];
-      activeChannel.classList.add('transparent');
+      [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.add('transparent') });
       noise.classList.add('show-media');
       pickWeightedRandomNoise();
     }
@@ -213,7 +214,7 @@
       events[loopIdx%events.length].classList.add('show-media');
       var id = parseInt(events[loopIdx%events.length].classList[0]);
       activeChannel.innerHTML = '<span class="system-message">' + id + '</span>';
-      activeChannel.classList.remove('transparent');
+      [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.remove('transparent') });
       showing.push(events[(loopIdx)%events.length]);
 
     }, Math.random()*1000 + 250);

@@ -17,12 +17,13 @@
     </span>
   </div>
 </div>
-<div id="cc" class="system-message">
+<div id="cc" class="system-message transparent hideable">
   CC
 </div>
 
 <div class="left-container">
-  <div id="active-channel" class="transparent click"><span class="system-message"><?= $item['id']; ?></span></div>
+  <div id="active-channel" class="transparent click hideable"><span class="system-message"><?= $item['id']; ?></span></div>
+  <div id="blue" class="transparent hideable"></div>
   <ul id="picker">
   <?foreach($events as $event) {
     ?>
@@ -119,10 +120,10 @@
     }
   }
 
-  var captions = document.getElementsByClassName('caption')
-  for (var i = 0; i < captions.length; i++) {
-    captions[i].onclick = hideShowCaptions;
-  }
+  // var captions = document.getElementsByClassName('caption')
+  // for (var i = 0; i < captions.length; i++) {
+  //   captions[i].onclick = hideShowCaptions;
+  // }
   document.getElementById('container').onclick = playPause;
 
   // goes to an index with noise transition
@@ -132,7 +133,7 @@
         e.classList.remove('show-media');
       });
       showing = [];
-      activeChannel.classList.add('transparent');
+      [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.add('transparent') });
       noise.classList.add('show-media');
       pickWeightedRandomNoise();
     }
@@ -140,7 +141,7 @@
       noise.classList.remove('show-media');
       loopIdx = idx;
       events[loopIdx%events.length].classList.add('show-media');
-      activeChannel.classList.remove('transparent');
+      [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.remove('transparent') });
       showing.push(events[(loopIdx)%events.length]);
 
     }, Math.random()*1000 + 250);
