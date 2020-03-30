@@ -1,6 +1,6 @@
 <?
   $events = $oo->children(getEventsID($oo, $root));
-  usort($events, "date_sort");
+  usort($events, "id_sort");
 
   $item = $oo->get($uu->id);
   $media = $oo->media($item['id']);
@@ -144,7 +144,7 @@
       [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.remove('transparent') });
       showing.push(events[(loopIdx)%events.length]);
 
-    }, Math.random()*1000 + 250);
+    }, Math.random()*500 + 125);
   }
 
   // runs the loop
