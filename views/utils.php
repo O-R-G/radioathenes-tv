@@ -39,4 +39,8 @@ function date_sort($a, $b) {
   return strtotime($b['begin']) - strtotime($a['begin']);
 }
 
+function id_sort($a, $b) {
+  return $a['id'] - $b['id'];
+}
+
 ?>

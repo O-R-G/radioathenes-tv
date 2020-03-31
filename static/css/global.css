@@ -157,13 +157,21 @@ ul:first-child {
 
   text-transform: uppercase;
 }
+
+#picker::-webkit-scrollbar {
+  display: none;
+}
 #picker {
   display: none;
-  padding-top: 20px;
+  margin-top: 20px;
   margin-left: 2em;
+  height: calc(100vh - 80px);
+  overflow-y: scroll;
+  /* hide scrollbar for ie */
+  -ms-overflow-style: none; 
 }
 .event-button {
-  margin-left: 0em;
+  margin-left: 2em;
   text-indent: -2em;
 }
 .click {

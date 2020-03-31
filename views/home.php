@@ -1,6 +1,7 @@
 <?
   $events = $oo->children(getEventsID($oo, $root));
-  usort($events, "date_sort");
+  // usort($events, "date_sort");
+  usort($events, "id_sort");
 ?>
 <div id="rotate-notice" class="message-full">
   <div class="">
@@ -57,7 +58,7 @@
 
   var showing = [];
   var loopIdx = -1; // index of the looper
-
+  
   // var events = document.getElementsByClassName('event');
   // var noise = document.getElementById('noise');
   // var eventButtons = document.getElementsByClassName('event-button');
@@ -127,7 +128,6 @@
 
                 newCaptionSpanDiv.innerHTML = e['caption'];
             }
-
             document.getElementById('container').appendChild(newDiv);
           });
 
@@ -217,7 +217,7 @@
       [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.remove('transparent') });
       showing.push(events[(loopIdx)%events.length]);
 
-    }, Math.random()*1000 + 250);
+    }, Math.random()*500 + 125);
   }
 
   document.getElementById('container').onclick = playPause;
