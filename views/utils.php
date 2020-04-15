@@ -43,4 +43,9 @@ function id_sort($a, $b) {
   return $a['id'] - $b['id'];
 }
 
+function begin_sort($a, $b) {
+    // sort by begin date of event, reverse
+    return $b['begin'] - $a['begin'];
+}
+
 ?>
