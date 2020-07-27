@@ -1,6 +1,7 @@
 <?
   $events = $oo->children(getEventsID($oo, $root));
-  usort($events, "id_sort");
+  // usort($events, "id_sort");
+  usort($events, "begin_sort");
 
   $item = $oo->get($uu->id);
   $media = $oo->media($item['id']);
@@ -24,15 +25,19 @@
 <div class="left-container">
   <div id="active-channel" class=" click "><span class="system-message"><?= $item['id']; ?></span></div>
   <div id="blue" class=""></div>
-  <ul id="picker">
-  <?foreach($events as $event) {
-    ?>
-    <li><div class="<?= $event['id']; ?> event-button click">
-      <a href="/events/<?= $event['url'] ?>" class="system-message"><?= $event['id']; ?> <?= $event['name1']; ?></a>
-    </div></li>
-      <?
-  } ?>
-  <li class="event-button click"><a href="/" class="system-message">*</a></li>
+  <ul id="picker"><? 
+    // for now, sticking with $id as channel number
+    $channel_number = 1;
+    foreach($events as $event) {
+        ?><li>
+            <div class="<?= $event['id']; ?> event-button click">
+                <!-- <a href="/events/<?= $event['url'] ?>" class="system-message"><?= $event['id']; ?> <?= $event['name1']; ?></a> -->
+                <a href="/events/<?= $event['url'] ?>" class="system-message"><?= $channel_number; ?> <?= $event['name1']; ?></a>
+            </div>
+        </li><?
+        $channel_number++;
+    }
+    ?><li class="event-button click"><a href="/" class="system-message">*</a></li>
   </ul>
 </div>
 

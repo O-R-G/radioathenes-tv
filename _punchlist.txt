@@ -1,0 +1,6 @@
+x o-r-g events order
++ channels order to reverse chronological
+x channel scrolling doesnt work in chrome
+/ img in colors setting? possible? could be done first char of caption (!)
+/ channel numbers currently using $id, should they be sequenced?
+
