@@ -1,4 +1,3 @@
 [submodule "open-records-generator"]
 	path = open-records-generator
-	url = https://github.com/reinfurt/open-records-generator
-	branch = wysiwig
+	url = git@github.com:reinfurt/open-records-generator.git
