@@ -11,8 +11,8 @@ function getEventsID($oo, $root) {
 
 function getNoiseGifs($oo, $root) {
   $children = $oo->children($root);
-  $systemId = None;
-  $gifsId = None;
+  $systemId = false;
+  $gifsId = false;
 
   foreach($children as $child) {
     $name =  strtolower($child["name1"]);

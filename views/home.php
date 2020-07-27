@@ -1,7 +1,6 @@
 <?
   $events = $oo->children(getEventsID($oo, $root));
-  // usort($events, "date_sort");
-  usort($events, "id_sort");
+  usort($events, "date_sort");
 ?>
 <div id="rotate-notice" class="message-full">
   <div class="">
@@ -17,21 +16,6 @@
 <div id="cc" class="transparent hideable">
   CC
 </div>
-
-<div class="left-container">
-  <div id="active-channel" class=" click "><span class="system-message"></span></div>
-  <div id="blue" class=""></div>
-  <ul id="picker">
-  <?foreach($events as $event) {
-    ?>
-    <li><div class="<?= $event['id']; ?> event-button click">
-      <a href="/events/<?= $event['url'] ?>" class="system-message"><?= $event['id']; ?> <?= $event['name1']; ?></a>
-    </div></li>
-      <?
-  } ?>
-  </ul>
-</div>
-
 <div class="full" id="fullscreen">
   <div class="container" id="container">
     <div class="media show-media" id="noise" >
@@ -42,54 +26,27 @@
       }
       ?>
     </div>
-    <!--  -->
   </div>
 </div>
 
 <script src="/static/js/global.js"></script>
 <script>
+  var test = 'eetest';
 (function() {
   var eventIds = [<?foreach($events as $event) { echo $event['id'] . ','; }?>]; // array of event ids in chronological order
   var eventNames = [<?foreach($events as $event) { echo '"' . $event['name1'] . '", '; }?>]; // array of event names
-  var eventIdx = 0; // keeps track of the index of the next event submitted to be loaded
-
+  var eventLength = eventNames.length;
+  var eventIdx = parseInt(eventLength * Math.random());
   var loadQueue = []; // prevent asynch race conditions
   var loading = false;
 
   var showing = [];
   var loopIdx = -1; // index of the looper
-  
-  // var events = document.getElementsByClassName('event');
-  // var noise = document.getElementById('noise');
-  // var eventButtons = document.getElementsByClassName('event-button');
-  // var activeChannel = document.getElementById('active-channel');
-
-  // picks a random noise gif based on weighted order (1/2, 1/4, 1/8, etc…)
-  // function pickWeightedRandomNoise() {
-  //   var noiseGifs = noise.getElementsByTagName('img');
-  //   var n = noiseGifs.length;
-  //
-  //   // generate a number (0, 2^(n-1)]
-  //   var random = Math.random()*Math.pow(2,(n-1));
-  //   var choiceIdx = -1;
-  //   for (var i = 1; i < n; i++) {
-  //     // if between (2^(n-i-1)-2^(n-i)], then it is index i-1
-  //     if (Math.pow(2,(n-i-1)) < random && random <= Math.pow(2, (n-i))) {
-  //       choiceIdx = i-1;
-  //     }
-  //   }
-  //   if (choiceIdx == -1) {
-  //     choiceIdx = n-1;
-  //   }
-  //
-  //   for (var i = 0; i < n; i++) {
-  //     noiseGifs[i].classList.add('hidden');
-  //   }
-  //   noiseGifs[choiceIdx].classList.remove('hidden');
-  // }
+  var events;
 
   // loader
   function loadNext() {
+
     if (loading == true) {
       return;
     }
@@ -104,7 +61,8 @@
           var eventMediaList = response['media'];
           eventMediaList.forEach(function(e) {
             var newDiv = document.createElement("div");
-            newDiv.classList.add(response['id']);
+            var this_order = events_ids_to_orders[response['id']];
+            newDiv.classList.add(this_order);
             newDiv.classList.add('media');
             newDiv.classList.add('event');
             var newImage = new Image();
@@ -144,42 +102,14 @@
   }
 
   // queues all the images to be loaded
-  for (var i = eventIdx; i < 1; i++) {
-    loadQueue.push(eventIds[eventIdx++]);
+  for (i = eventIdx; i < eventLength; i++) {
+    loadQueue.push(eventIds[(i)]);
   }
+  for(i = 0; i< eventIdx; i++){
+    loadQueue.push(eventIds[(i)]);
+  }
+  // console.log(loadQueue);
   loadNext();
-
-  // setup jumping to indexes
-  // for (var i = 0; i < eventButtons.length; i++) {
-  //   var eventId = parseInt(eventButtons[i].classList[0]);
-  //   eventButtons[i].onclick = clickFunction(eventId);
-  // }
-
-  // handles clicks on the events
-  // function clickFunction(id) {
-  //   return function() {
-  //     var subevents = document.getElementsByClassName('event ' + id);
-  //     var gotoIdx = Array.prototype.indexOf.call(events, subevents[0]);
-  //     document.getElementById('picker').style.display = 'none';
-  //     gotoIndex(gotoIdx);
-  //   }
-  // }
-
-  // activeChannel.onclick = function() {
-  //   if (document.getElementById('picker').style.display == 'block') {
-  //       document.getElementById('picker').style.display = 'none';
-  //   } else {
-  //     document.getElementById('picker').style.display = 'block';
-  //   }
-  // }
-  //
-  // document.getElementById('container').onclick = playPause;
-  // document.getElementById('container').getElementsByTagName('img').onclick = playPause;
-
-  // var captions = document.getElementsByClassName('caption');
-  // for (var i = 0; i < captions.length; i++) {
-  //   captions[i].onclick = hideShowCaptions;
-  // }
 
   function playPause() {
     if (looper) {
@@ -199,6 +129,7 @@
 
   // goes to an index with noise transition
   function gotoIndex(idx) {
+
     if (loopIdx != -1) {
       showing.forEach(function(e) {
         e.classList.remove('show-media');
@@ -211,7 +142,7 @@
     setTimeout(function() {
       noise.classList.remove('show-media');
       loopIdx = idx;
-      events[loopIdx%events.length].classList.add('show-media');
+      events[(loopIdx % events.length)].classList.add('show-media');
       var id = parseInt(events[loopIdx%events.length].classList[0]);
       activeChannel.innerHTML = '<span class="system-message">' + id + '</span>';
       [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.remove('transparent') });

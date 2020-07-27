@@ -12,8 +12,13 @@ $view = "views/";
 // show the things
 require_once("views/head.php");
 require_once("views/utils.php");
+require_once("views/menu.php");
 if ($uri[1] == "events") {
   require_once("views/event.php");
+} elseif($uri[1] == "all") {
+  require_once("views/all.php");
+} elseif($uri[1] == "credit") {
+  require_once("views/credit.php");
 } else {
   require_once("views/home.php");
 }

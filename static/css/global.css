@@ -294,6 +294,26 @@ ul:first-child {
   position: fixed;
   z-index: -2;
 }
+#credit{
+  color: #fff;
+  overflow: scroll;
+  height: 100vh;
+  padding: 70px;
+}
+.credit-section{
+  
+  display: inline-block;
+  /*width: 0;*/
+}
+.credit-section > div{
+  background-color: #00f;
+  /*display: inline-block;*/
+}
+
+.credit-section a:hover{
+  background-color: #fff;
+  color: #00f;
+}
 
 @media screen and (max-width: 640px) {
   #rotate-notice {
