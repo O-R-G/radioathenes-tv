@@ -3,4 +3,4 @@ x o-r-g events order
 x channel scrolling doesnt work in chrome
 / img in colors setting? possible? could be done first char of caption (!)
 / channel numbers currently using $id, should they be sequenced?
-
++ add sync_ and backup_ bash scripts
