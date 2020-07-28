@@ -1,0 +1,7 @@
+#!/bin/sh
+# update local database and media from remote
+mysqldump -u athenes -pNormanPotter2987 -h 178.128.207.99 radioathenes_tv > /Library/Webserver/Documents/radioathenes.tv.local/radioathenes_remote.mysql
+mysql -u root -p radioathenes_tv_local < /Library/Webserver/Documents/radioathenes.tv.local/radioathenes_remote.mysql
+rsync -azP reinfurt@staging.radioathenes.tv:/var/www/html/media/ /Library/WebServer/Documents/radioathenes.tv.local/media
+rm /Library/Webserver/Documents/radioathenes.tv.local/radioathenes_remote.mysql
+

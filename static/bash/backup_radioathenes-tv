@@ -1,0 +1,8 @@
+#!/bin/sh
+
+DATE=`date +%Y-%m-%d`
+DIR="/home/reinfurt/backups/radioathenes.tv/"
+SQL="$DIR/$DATE.sql"
+echo "\n$DATE"
+mysqldump -u athenes -pNormanPotter2987 -h 178.128.207.99 radioathenes_tv > $SQL
+rsync -azP /var/www/html/media/ $DIR/media
