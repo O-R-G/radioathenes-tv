@@ -1,0 +1,7 @@
+{
+  "short_name": "radioathenes.tv",
+  "name": "radioathenes.tv",
+  "start_url": "/index.php",
+  "display": "standalone",
+  "orientation": "landscape"
+}
