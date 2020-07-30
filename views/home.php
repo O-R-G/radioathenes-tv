@@ -24,12 +24,6 @@
       }
       ?>
     </div>
-    <!-- <div id = 'event-media-1' class = 'event media'>
-      <img><div class = 'caption-container'><div class = 'caption'><span></span></div></div>
-    </div>
-    <div id = 'event-media-2' class = 'event media'>
-      <img><div class = 'caption-container'><div class = 'caption'><span></span></div></div>
-    </div> -->
   </div>
 </div>
 
@@ -72,16 +66,11 @@
           eventMediaList.forEach(function(e) {
             var newDiv = document.createElement("div");
             var this_order = events_ids_to_orders[response['id']];
-            // if(typeof event_img_src[this_order] == 'undefined'){
-            //   event_img_src[this_order] = [];
-            //   event_img_caption[this_order] = [];
-            // }
             newDiv.classList.add(this_order);
             newDiv.classList.add('media');
             newDiv.classList.add('event');
             var newImage = new Image();
             newImage.src = e['url'];
-            // event_img_src[this_order].push(e['url']);
             newDiv.appendChild(newImage);
 
             if (e['caption'] != '') {
@@ -97,11 +86,7 @@
                 newCaptionDiv.appendChild(newCaptionSpanDiv);
 
                 newCaptionSpanDiv.innerHTML = e['caption'];
-                // event_img_caption[this_order].push(e['caption']);
             }
-            // else{
-            //   event_img_caption[this_order].push('');
-            // }
             document.getElementById('container').appendChild(newDiv);
           });
 
@@ -125,7 +110,6 @@
   for(i = 0; i< eventIdx; i++){
     loadQueue.push(eventIds[(i)]);
   }
-  // console.log(loadQueue);
   preloadNext();
 
   function playPause() {
@@ -144,33 +128,6 @@
     }
   }
 
-
-  function nextSlide(){
-    [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.add('transparent') });
-      noise.classList.add('show-media');
-      pickWeightedRandomNoise();
-    setTimeout(function() {
-      // show current
-      noise.classList.remove('show-media');
-      events[(loopIdx % 2)].classList.add('show-media');
-      [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.remove('transparent') });
-
-      // preload next
-      loopIdx++;
-      if(loopIdx > current_event_img_src.length - 1){
-        nextEvent();
-        loopIdx = 0;
-      }
-      events[(loopIdx % 2)].classList.remove('show-media');
-      event_img[(loopIdx % 2)].src = current_event_img_src[loopIdx];
-      event_caption_span[(loopIdx % 2)].innertext = current_event_img_caption[loopIdx];
-    }, Math.random()*500 + 125);
-  }
-  function nextEvent(){
-      eventIdx++;
-      current_event_img_src = event_img_src[eventIdx];
-      current_event_img_caption = event_img_caption[eventIdx];
-  }
   function gotoIndex(idx) {
 
     if (loopIdx != -1) {
