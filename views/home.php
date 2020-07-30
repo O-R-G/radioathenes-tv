@@ -42,6 +42,8 @@
   var slideIdx = 0;
   var isReady = false;
   var ready_count = 0;
+  var load_starting;
+  var load_ending;
 (function() {
   var eventIds = [<?foreach($events as $event) { echo $event['id'] . ','; }?>]; // array of event ids in chronological order
   var eventNames = [<?foreach($events as $event) { echo '"' . $event['name1'] . '", '; }?>]; // array of event names
@@ -166,17 +168,23 @@
       }
     }
     if(this_order == eventIdx){
-      // console.log('this_order == eventIdx');
+      // first event
+      load_starting = Date.now();
       img.addEventListener('load', function(){
         ready_count++;
         console.log(ready_count+'/'+imageArray.length);
         if(ready_count == imageArray.length && !isReady){
           console.log('ready!');
+          load_ending = Date.now();
           isReady = true;
           current_event_img_src = event_img_src[eventIdx];
           current_event_img_caption = event_img_caption[eventIdx];
           event_img[(loopIdx % 2)].src = current_event_img_src[loopIdx];
           event_caption_span[(loopIdx % 2)].innerText = current_event_img_caption[loopIdx];
+          console.log('loading time = '+ (load_ending - load_starting));
+          if(load_ending - load_starting > 4000){
+            nextSlide();
+          }
           looper = setInterval(function() {
             nextSlide();
           }, 4000);
