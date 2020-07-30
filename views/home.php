@@ -233,6 +233,9 @@ window.addEventListener('resize', function(){
   console.log('resized!');
   console.log(window.innerWidth);
   console.log(window.innerHeight);
-  body.requestFullscreen();
+  if(window.innerWidth > window.innerHeight)
+    body.requestFullscreen();
+  else
+    Document.exitFullscreen();
 });
 </script>
