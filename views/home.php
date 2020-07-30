@@ -147,7 +147,7 @@
       activeChannel.innerHTML = '<span class="system-message">' + id + '</span>';
       [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.remove('transparent') });
       showing.push(events[(loopIdx)%events.length]);
-    }, Math.random()*100 + 125);
+    }, Math.random()*500 + 125);
   }
 
   document.getElementById('container').onclick = playPause;
@@ -155,6 +155,6 @@
   // runs the loop
   var looper = setInterval(function() {
     gotoIndex(loopIdx+1);
-  }, 2000);
+  }, 5000);
 })();
 </script>
