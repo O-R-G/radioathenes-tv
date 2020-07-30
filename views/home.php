@@ -78,9 +78,9 @@
           preloadImg(eventMediaList, 0, thisId);
 
           loading = false;
-          if (loadQueue.length > 0) {
-            preloadNext();
-          }
+          // if (loadQueue.length > 0) {
+          //   preloadNext();
+          // }
         }
     };
     xhttp.open("GET", "views/getEventMedia.php?id=" + nextEventId, true);
@@ -159,6 +159,11 @@
         // console.log('load done!');
         preloadImg(imageArray, index + 1, id);
       });
+    }
+    else if(index+1 == imageArray.length){
+      if (loadQueue.length > 0) {
+        preloadNext();
+      }
     }
     if(this_order == eventIdx){
       // console.log('this_order == eventIdx');
