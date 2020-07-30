@@ -244,5 +244,6 @@ body.addEventListener('click', function(){
     body.requestFullscreen();
   else
     Document.exitFullscreen();
+  isFullscreen = !isFullscreen;
 });
 </script>
