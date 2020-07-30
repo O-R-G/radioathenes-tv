@@ -35,12 +35,13 @@ $nav = $oo->nav($uu->ids);
 	<head>
 		<title><? echo $title; ?></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<!-- <meta name="apple-mobile-web-app-capable" content="yes"> -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="mobile-web-app-capable" content="yes">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link rel="stylesheet" href="<? echo $host; ?>static/fonts/beeb/stylesheet.css">
 		<link rel="stylesheet" href="<? echo $host; ?>static/css/global.css">
 		<link rel="apple-touch-icon" href="<? echo $host; ?>media/png/touchicon.png" />
-		<link rel="manifest" href="/static/json/manifest.json">
+		<!-- <link rel="manifest" href="/static/json/manifest.json"> -->
 		<!-- <script src="static/js/analytics.js"></script> -->
 	</head>
 <body>
