@@ -24,12 +24,12 @@
       }
       ?>
     </div>
-    <!-- <div id = 'event-media-1' class = 'event media'>
+    <div id = 'event-media-1' class = 'event media'>
       <img><div class = 'caption-container'><div class = 'caption'><span></span></div></div>
     </div>
     <div id = 'event-media-2' class = 'event media'>
       <img><div class = 'caption-container'><div class = 'caption'><span></span></div></div>
-    </div> -->
+    </div>
   </div>
 </div>
 
@@ -40,11 +40,14 @@
   var current_event_img_src = [];
   var current_event_img_caption = [];
   var slideIdx = 0;
+  var isReady = false;
+  var ready_count = 0;
 (function() {
   var eventIds = [<?foreach($events as $event) { echo $event['id'] . ','; }?>]; // array of event ids in chronological order
   var eventNames = [<?foreach($events as $event) { echo '"' . $event['name1'] . '", '; }?>]; // array of event names
   var eventLength = eventNames.length;
   var eventIdx = parseInt(eventLength * Math.random());
+  console.log(eventIdx);
   var loadQueue = []; // prevent asynch race conditions
   var loading = false;
 
@@ -53,7 +56,9 @@
   var events = document.getElementsByClassName('event');
   var event_img = document.querySelectorAll('.event img');
   var event_caption_span = document.querySelectorAll('.caption-container span');
-
+  var activeChannel_span = document.querySelector('#active-channel span');
+  var looper;
+  // var events_ids_to_orders
   // loader
   function preloadNext() {
 
@@ -61,8 +66,8 @@
       return;
     }
     loading = true;
+    
     var nextEventId = loadQueue.shift();
-    // load the element with new http request
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -70,44 +75,45 @@
           var response = JSON.parse(xhttp.responseText);
           var eventMediaList = response['media'];
           eventMediaList.forEach(function(e) {
-            var newDiv = document.createElement("div");
+            // var newDiv = document.createElement("div");
             var this_order = events_ids_to_orders[response['id']];
-            // if(typeof event_img_src[this_order] == 'undefined'){
-            //   event_img_src[this_order] = [];
-            //   event_img_caption[this_order] = [];
-            // }
-            newDiv.classList.add(this_order);
-            newDiv.classList.add('media');
-            newDiv.classList.add('event');
+
+            if(typeof event_img_src[this_order] == 'undefined'){
+              event_img_src[this_order] = [];
+              event_img_caption[this_order] = [];
+            }
             var newImage = new Image();
+            if(this_order == eventIdx){
+              newImage.onload = function(){
+                ready_count++;
+                console.log(ready_count+'/'+eventMediaList.length);
+                if(ready_count == eventMediaList.length && !isReady){
+                  isReady = true;
+                  current_event_img_src = event_img_src[eventIdx];
+                  current_event_img_caption = event_img_caption[eventIdx];
+                  event_img[(loopIdx % 2)].src = current_event_img_src[loopIdx];
+                  event_caption_span[(loopIdx % 2)].innerText = current_event_img_caption[loopIdx];
+                  
+                  looper = setInterval(function() {
+                    nextSlide();
+                  }, 4000);
+
+                }
+              };
+            }
+            
             newImage.src = e['url'];
-            // event_img_src[this_order].push(e['url']);
-            newDiv.appendChild(newImage);
+            event_img_src[this_order].push(e['url']);
+            // newDiv.appendChild(newImage);
 
             if (e['caption'] != '') {
-                var newCaptionContainerDiv = document.createElement("div");
-                newCaptionContainerDiv.classList.add('caption-container');
-                newDiv.appendChild(newCaptionContainerDiv);
-
-                var newCaptionDiv = document.createElement("div");
-                newCaptionDiv.classList.add('caption');
-                newCaptionContainerDiv.appendChild(newCaptionDiv);
-
-                var newCaptionSpanDiv = document.createElement("span");
-                newCaptionDiv.appendChild(newCaptionSpanDiv);
-
-                newCaptionSpanDiv.innerHTML = e['caption'];
-                // event_img_caption[this_order].push(e['caption']);
+                event_img_caption[this_order].push(e['caption']);
             }
-            // else{
-            //   event_img_caption[this_order].push('');
-            // }
-            document.getElementById('container').appendChild(newDiv);
+            else{
+              event_img_caption[this_order].push('');
+            }
           });
 
-          // update medias
-          events = document.getElementsByClassName('event');
-          // console.log(events);
           loading = false;
           if (loadQueue.length > 0) {
             preloadNext();
@@ -120,12 +126,12 @@
 
   // queues all the images to be loaded
   for (i = eventIdx; i < eventLength; i++) {
-    loadQueue.push(eventIds[(i)]);
+    loadQueue.push(eventIds[i]);
   }
   for(i = 0; i< eventIdx; i++){
-    loadQueue.push(eventIds[(i)]);
+    loadQueue.push(eventIds[i]);
   }
-  // console.log(loadQueue);
+  eventIdx++; //some hack to jusitify. eventIdx starts from 1.
   preloadNext();
 
   function playPause() {
@@ -137,15 +143,17 @@
       showCenterMessage('PLAY', false);
       setTimeout(hideCenterMessage, 2000);
 
-      gotoIndex(loopIdx+1);
+      nextSlide();
       looper = setInterval(function() {
-        gotoIndex(loopIdx+1);
+        nextSlide();
       }, 5000);
     }
   }
 
 
   function nextSlide(){
+    if(loopIdx == 0)
+      activeChannel_span.innerText = eventIdx;
     [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.add('transparent') });
       noise.classList.add('show-media');
       pickWeightedRandomNoise();
@@ -163,11 +171,13 @@
       }
       events[(loopIdx % 2)].classList.remove('show-media');
       event_img[(loopIdx % 2)].src = current_event_img_src[loopIdx];
-      event_caption_span[(loopIdx % 2)].innertext = current_event_img_caption[loopIdx];
+      event_caption_span[(loopIdx % 2)].innerText = current_event_img_caption[loopIdx];
     }, Math.random()*500 + 125);
   }
   function nextEvent(){
       eventIdx++;
+      if(eventIdx > eventLength)
+        eventIdx = 1;
       current_event_img_src = event_img_src[eventIdx];
       current_event_img_caption = event_img_caption[eventIdx];
   }
@@ -190,14 +200,12 @@
       activeChannel.innerHTML = '<span class="system-message">' + id + '</span>';
       [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.remove('transparent') });
       showing.push(events[(loopIdx)%events.length]);
-    }, Math.random()*100 + 125);
+    }, Math.random()*500 + 125);
   }
-
+  
   document.getElementById('container').onclick = playPause;
-
+  showCenterMessage('Channel ' + eventIdx, false);
   // runs the loop
-  var looper = setInterval(function() {
-    gotoIndex(loopIdx+1);
-  }, 2000);
+  
 })();
 </script>

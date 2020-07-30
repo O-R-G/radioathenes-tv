@@ -37,4 +37,5 @@
 </div>
 <script>
 	var events_ids_to_orders = <? echo json_encode($events_ids_to_orders); ?>;
+  var events_orders_to_ids = <? echo json_encode(array_flip($events_ids_to_orders)); ?>;
 </script>
