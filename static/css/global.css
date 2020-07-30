@@ -272,7 +272,7 @@ ul:first-child {
   object-fit: fill;
 }
 #noise {
-  z-index: 50;
+  z-index: 60;
   pointer-events: none;
 }
 
