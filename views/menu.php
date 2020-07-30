@@ -5,25 +5,29 @@
 	$media = $oo->media($item['id']);
 	$events_ids_to_orders = array();
 
-	$credit_id = end($oo->urls_to_ids(array('system', 'credit')));
+	$credit_id = end($oo->urls_to_ids(array('system', 'credits')));
 	$credit = $oo->get($credit_id);
 ?>
 
 <div class="left-container">
-  <div id="active-channel" class=" click "><span class="system-message"></span></div>
-  <div id="blue" class=""></div>
+  
+  <div id="blue" class="">
+    <div id="active-channel" class="click">
+      <span class="system-message"></span>
+    </div>
+  </div>
   <ul id="picker">
   <?foreach($events as $key => $event) {
-    $event_date = date('y-m-d', strtotime($event['begin']));
+    // $event_date = date('y-m-d', strtotime($event['begin']));
     $event['order'] = $key + 1;
     $events_ids_to_orders[$event['id']] = $event['order'];
     ?>
-    <li><div class="<?= $event['order']; ?> event-button click">
-      <a href="/events/<?= $event['url'] ?>" class="system-message"><?= $event['order']; ?> <?= $event_date; ?> <?= $event['name1']; ?></a>
+    <li><div id = 'event-button-<?= $event['order']; ?>' class="<?= $event['order']; ?> event-button click">
+      <a href="/events/<?= $event['url'] ?>" class="system-message"><?= $event['order']; ?> <?= $event['name1']; ?></a>
     </div></li>
       <?
   } ?>
-  <li><div class="0 event-button click">
+  <br><li><div id = 'event-button-0' class="0 event-button click">
       <a href="/<?= $credit['url'] ?>" class="system-message"><?= $credit['name1']; ?></a>
   </div></li>
   <? if($uri[1]){ ?>

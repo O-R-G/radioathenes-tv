@@ -163,8 +163,9 @@ ul:first-child {
 }
 #picker {
   display: none;
-  margin-top: 20px;
-  margin-left: 2em;
+  margin-top: 45px;
+  margin-left: 45px;
+  padding-bottom: 70px;
   height: calc(100vh - 80px);
   overflow-y: scroll;
   /* hide scrollbar for ie */
@@ -174,6 +175,7 @@ ul:first-child {
   margin-left: 2em;
   text-indent: -2em;
 }
+
 .click {
   cursor: pointer;
 }
@@ -288,9 +290,12 @@ ul:first-child {
 #blue {
   width: 70px;
   height: 70px;
+  padding-top: 24px;
+  padding-left: 6px;
   background-color: #00f;
   top: 0;
   left: 0;
+  text-align: center;
   position: fixed;
   z-index: -2;
 }

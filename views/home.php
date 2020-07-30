@@ -1,6 +1,4 @@
 <?
-  $events = $oo->children(getEventsID($oo, $root));
-  usort($events, "date_sort");
 ?>
 <div id="rotate-notice" class="message-full">
   <div class="">
@@ -31,7 +29,6 @@
 
 <script src="/static/js/global.js"></script>
 <script>
-  var test = 'eetest';
 (function() {
   var eventIds = [<?foreach($events as $event) { echo $event['id'] . ','; }?>]; // array of event ids in chronological order
   var eventNames = [<?foreach($events as $event) { echo '"' . $event['name1'] . '", '; }?>]; // array of event names
@@ -51,7 +48,9 @@
       return;
     }
     loading = true;
+    console.log(loadQueue);
     var nextEventId = loadQueue.shift();
+    console.log(loadQueue);
     // load the element with new http request
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -91,10 +90,11 @@
 
           // update medias
           events = document.getElementsByClassName('event');
+          // console.log(events);
           loading = false;
-          if (loadQueue.length > 0) {
-            loadNext();
-          }
+          // if (loadQueue.length > 0) {
+          //   loadNext();
+          // }
         }
     };
     xhttp.open("GET", "views/getEventMedia.php?id=" + nextEventId, true);
@@ -147,8 +147,10 @@
       activeChannel.innerHTML = '<span class="system-message">' + id + '</span>';
       [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.remove('transparent') });
       showing.push(events[(loopIdx)%events.length]);
-
-    }, Math.random()*500 + 125);
+      if (loadQueue.length > 0) {
+        loadNext();
+      }
+    }, Math.random()*100 + 125);
   }
 
   document.getElementById('container').onclick = playPause;
@@ -156,6 +158,6 @@
   // runs the loop
   var looper = setInterval(function() {
     gotoIndex(loopIdx+1);
-  }, 5000);
+  }, 1000);
 })();
 </script>
