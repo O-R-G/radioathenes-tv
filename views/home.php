@@ -24,11 +24,22 @@
       }
       ?>
     </div>
+    <!-- <div id = 'event-media-1' class = 'event media'>
+      <img><div class = 'caption-container'><div class = 'caption'><span></span></div></div>
+    </div>
+    <div id = 'event-media-2' class = 'event media'>
+      <img><div class = 'caption-container'><div class = 'caption'><span></span></div></div>
+    </div> -->
   </div>
 </div>
 
 <script src="/static/js/global.js"></script>
 <script>
+  var event_img_src = {};
+  var event_img_caption = {};
+  var current_event_img_src = [];
+  var current_event_img_caption = [];
+  var slideIdx = 0;
 (function() {
   var eventIds = [<?foreach($events as $event) { echo $event['id'] . ','; }?>]; // array of event ids in chronological order
   var eventNames = [<?foreach($events as $event) { echo '"' . $event['name1'] . '", '; }?>]; // array of event names
@@ -38,19 +49,19 @@
   var loading = false;
 
   var showing = [];
-  var loopIdx = -1; // index of the looper
-  var events;
+  var loopIdx = 0; // index of the looper
+  var events = document.getElementsByClassName('event');
+  var event_img = document.querySelectorAll('.event img');
+  var event_caption_span = document.querySelectorAll('.caption-container span');
 
   // loader
-  function loadNext() {
+  function preloadNext() {
 
     if (loading == true) {
       return;
     }
     loading = true;
-    console.log(loadQueue);
     var nextEventId = loadQueue.shift();
-    console.log(loadQueue);
     // load the element with new http request
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -61,12 +72,16 @@
           eventMediaList.forEach(function(e) {
             var newDiv = document.createElement("div");
             var this_order = events_ids_to_orders[response['id']];
+            // if(typeof event_img_src[this_order] == 'undefined'){
+            //   event_img_src[this_order] = [];
+            //   event_img_caption[this_order] = [];
+            // }
             newDiv.classList.add(this_order);
             newDiv.classList.add('media');
             newDiv.classList.add('event');
             var newImage = new Image();
             newImage.src = e['url'];
-
+            // event_img_src[this_order].push(e['url']);
             newDiv.appendChild(newImage);
 
             if (e['caption'] != '') {
@@ -76,15 +91,17 @@
 
                 var newCaptionDiv = document.createElement("div");
                 newCaptionDiv.classList.add('caption');
-                // newCaptionDiv.onclick = hideShowCaptions;
                 newCaptionContainerDiv.appendChild(newCaptionDiv);
 
                 var newCaptionSpanDiv = document.createElement("span");
-                // newCaptionSpanDiv.classList.add('');
                 newCaptionDiv.appendChild(newCaptionSpanDiv);
 
                 newCaptionSpanDiv.innerHTML = e['caption'];
+                // event_img_caption[this_order].push(e['caption']);
             }
+            // else{
+            //   event_img_caption[this_order].push('');
+            // }
             document.getElementById('container').appendChild(newDiv);
           });
 
@@ -92,9 +109,9 @@
           events = document.getElementsByClassName('event');
           // console.log(events);
           loading = false;
-          // if (loadQueue.length > 0) {
-          //   loadNext();
-          // }
+          if (loadQueue.length > 0) {
+            preloadNext();
+          }
         }
     };
     xhttp.open("GET", "views/getEventMedia.php?id=" + nextEventId, true);
@@ -109,7 +126,7 @@
     loadQueue.push(eventIds[(i)]);
   }
   // console.log(loadQueue);
-  loadNext();
+  preloadNext();
 
   function playPause() {
     if (looper) {
@@ -127,7 +144,33 @@
     }
   }
 
-  // goes to an index with noise transition
+
+  function nextSlide(){
+    [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.add('transparent') });
+      noise.classList.add('show-media');
+      pickWeightedRandomNoise();
+    setTimeout(function() {
+      // show current
+      noise.classList.remove('show-media');
+      events[(loopIdx % 2)].classList.add('show-media');
+      [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.remove('transparent') });
+
+      // preload next
+      loopIdx++;
+      if(loopIdx > current_event_img_src.length - 1){
+        nextEvent();
+        loopIdx = 0;
+      }
+      events[(loopIdx % 2)].classList.remove('show-media');
+      event_img[(loopIdx % 2)].src = current_event_img_src[loopIdx];
+      event_caption_span[(loopIdx % 2)].innertext = current_event_img_caption[loopIdx];
+    }, Math.random()*500 + 125);
+  }
+  function nextEvent(){
+      eventIdx++;
+      current_event_img_src = event_img_src[eventIdx];
+      current_event_img_caption = event_img_caption[eventIdx];
+  }
   function gotoIndex(idx) {
 
     if (loopIdx != -1) {
@@ -147,9 +190,6 @@
       activeChannel.innerHTML = '<span class="system-message">' + id + '</span>';
       [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.remove('transparent') });
       showing.push(events[(loopIdx)%events.length]);
-      if (loadQueue.length > 0) {
-        loadNext();
-      }
     }, Math.random()*100 + 125);
   }
 
@@ -158,6 +198,6 @@
   // runs the loop
   var looper = setInterval(function() {
     gotoIndex(loopIdx+1);
-  }, 1000);
+  }, 2000);
 })();
 </script>
