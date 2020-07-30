@@ -229,11 +229,18 @@
   
 })();
 var body = document.body;
+var isFullscreen = false;
 window.addEventListener('resize', function(){
   console.log('resized!');
   console.log(window.innerWidth);
   console.log(window.innerHeight);
   if(window.innerWidth > window.innerHeight)
+    body.requestFullscreen();
+  else
+    Document.exitFullscreen();
+});
+body.addEventListener('click', function(){
+  if(!isFullscreen)
     body.requestFullscreen();
   else
     Document.exitFullscreen();
