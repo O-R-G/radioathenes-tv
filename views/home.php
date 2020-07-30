@@ -74,45 +74,8 @@
            // Typical action to be performed when the document is ready:
           var response = JSON.parse(xhttp.responseText);
           var eventMediaList = response['media'];
-          eventMediaList.forEach(function(e) {
-            // var newDiv = document.createElement("div");
-            var this_order = events_ids_to_orders[response['id']];
-
-            if(typeof event_img_src[this_order] == 'undefined'){
-              event_img_src[this_order] = [];
-              event_img_caption[this_order] = [];
-            }
-            var newImage = new Image();
-            if(this_order == eventIdx){
-              newImage.onload = function(){
-                ready_count++;
-                console.log(ready_count+'/'+eventMediaList.length);
-                if(ready_count == eventMediaList.length && !isReady){
-                  isReady = true;
-                  current_event_img_src = event_img_src[eventIdx];
-                  current_event_img_caption = event_img_caption[eventIdx];
-                  event_img[(loopIdx % 2)].src = current_event_img_src[loopIdx];
-                  event_caption_span[(loopIdx % 2)].innerText = current_event_img_caption[loopIdx];
-                  
-                  looper = setInterval(function() {
-                    nextSlide();
-                  }, 4000);
-
-                }
-              };
-            }
-            
-            newImage.src = e['url'];
-            event_img_src[this_order].push(e['url']);
-            // newDiv.appendChild(newImage);
-
-            if (e['caption'] != '') {
-                event_img_caption[this_order].push(e['caption']);
-            }
-            else{
-              event_img_caption[this_order].push('');
-            }
-          });
+          var thisId = response['id'];
+          preloadImg(eventMediaList, 0, thisId);
 
           loading = false;
           if (loadQueue.length > 0) {
@@ -180,6 +143,50 @@
         eventIdx = 1;
       current_event_img_src = event_img_src[eventIdx];
       current_event_img_caption = event_img_caption[eventIdx];
+  }
+  function preloadImg(imageArray, index, id){
+    index = index || 0;
+    var this_order = events_ids_to_orders[id];
+    var e = imageArray[index];
+    if(typeof event_img_src[this_order] == 'undefined'){
+      event_img_src[this_order] = [];
+      event_img_caption[this_order] = [];
+    }
+    var img = new Image ();
+    if (imageArray && imageArray.length > index+1) {
+      
+      img.addEventListener('load', function(){
+        // console.log('load done!');
+        preloadImg(imageArray, index + 1, id);
+      });
+    }
+    if(this_order == eventIdx){
+      // console.log('this_order == eventIdx');
+      img.addEventListener('load', function(){
+        ready_count++;
+        // console.log(ready_count+'/'+imageArray.length);
+        if(ready_count == imageArray.length && !isReady){
+          // console.log('ready!');
+          isReady = true;
+          current_event_img_src = event_img_src[eventIdx];
+          current_event_img_caption = event_img_caption[eventIdx];
+          event_img[(loopIdx % 2)].src = current_event_img_src[loopIdx];
+          event_caption_span[(loopIdx % 2)].innerText = current_event_img_caption[loopIdx];
+          looper = setInterval(function() {
+            nextSlide();
+          }, 4000);
+
+        }
+      });
+    }
+    img.src = e['url'];
+    event_img_src[this_order].push(e['url']);
+      if (e['caption'] != '') {
+        event_img_caption[this_order].push(e['caption']);
+    }
+    else{
+      event_img_caption[this_order].push('');
+    }    
   }
   function gotoIndex(idx) {
 
