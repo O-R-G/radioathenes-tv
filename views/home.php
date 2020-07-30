@@ -228,4 +228,11 @@
   // runs the loop
   
 })();
+var body = document.body;
+window.addEventListener('resize', function(){
+  console.log('resized!');
+  console.log(window.innerWidth);
+  console.log(window.innerHeight);
+  body.requestFullscreen();
+});
 </script>
