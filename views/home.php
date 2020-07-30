@@ -204,7 +204,7 @@
   }
   
   document.getElementById('container').onclick = playPause;
-  showCenterMessage('Channel ' + eventIdx, false);
+  
   // runs the loop
   
 })();

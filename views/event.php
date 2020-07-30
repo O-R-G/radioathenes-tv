@@ -52,9 +52,25 @@
   // var noise = document.getElementById('noise');
   var activeChannel = document.getElementById('active-channel');
   var activeChannel_span = document.querySelector('#active-channel span');
-  var eventName = events_ids_to_orders[<?= $item['id']; ?>];
-  activeChannel_span.innerText = eventName;
+  var eventOrder = events_ids_to_orders[<?= $item['id']; ?>];
+  activeChannel_span.innerText = eventOrder;
+  var looper;
 
+  // function playPause() {
+  //   if (looper) {
+  //     clearInterval(looper);
+  //     looper = null;
+  //     showCenterMessage('PAUSED', true);
+  //   } else {
+  //     showCenterMessage('PLAY', false);
+  //     setTimeout(hideCenterMessage, 1000);
+
+  //     gotoIndex(loopIdx+1);
+  //     looper = setInterval(function() {
+  //       gotoIndex(loopIdx+1);
+  //     }, 5000);
+  //   }
+  // }
   function playPause() {
     if (looper) {
       clearInterval(looper);
@@ -62,11 +78,11 @@
       showCenterMessage('PAUSED', true);
     } else {
       showCenterMessage('PLAY', false);
-      setTimeout(hideCenterMessage, 1000);
+      setTimeout(hideCenterMessage, 2000);
 
-      gotoIndex(loopIdx+1);
+      nextSlide();
       looper = setInterval(function() {
-        gotoIndex(loopIdx+1);
+        nextSlide();
       }, 5000);
     }
   }
