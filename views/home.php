@@ -173,7 +173,7 @@
       img.addEventListener('load', function(){
         ready_count++;
         console.log(ready_count+'/'+imageArray.length);
-        if(ready_count == imageArray.length && !isReady){
+        if((ready_count == imageArray.length || ready_count == 10) && !isReady){
           console.log('ready!');
           load_ending = Date.now();
           isReady = true;
