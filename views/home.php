@@ -164,9 +164,9 @@
       // console.log('this_order == eventIdx');
       img.addEventListener('load', function(){
         ready_count++;
-        // console.log(ready_count+'/'+imageArray.length);
+        console.log(ready_count+'/'+imageArray.length);
         if(ready_count == imageArray.length && !isReady){
-          // console.log('ready!');
+          console.log('ready!');
           isReady = true;
           current_event_img_src = event_img_src[eventIdx];
           current_event_img_caption = event_img_caption[eventIdx];
