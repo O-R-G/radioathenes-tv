@@ -63,8 +63,9 @@
       clearCenterMessage;
   var ready_count = 0;
   var isReady = false;
+  var slideInterval = 5000;
   var slideBegin;
-  var slideRemain = 4000;
+  var slideRemain = slideInterval;
   var slidePlaying = false;
 
   function preloadImg_single(imageArray, index){
@@ -83,12 +84,12 @@
         isReady = true;
         event_img[(loopIdx % 2)].src = media_url_array[loopIdx];
         event_caption_span[(loopIdx % 2)].innerText = media_caption_array[loopIdx];
-        if(load_ending - load_starting > 4000){
+        if(load_ending - load_starting > slideInterval){
           nextSlide_single();
         }
         looper = setInterval(function() {
           nextSlide_single();
-        }, 4000);
+        }, slideInterval);
 
       }
     });
@@ -100,7 +101,7 @@
   function nextSlide_single(){
     slidePlaying = true;
     slideBegin = Date.now();
-    slideRemain = 4000;
+    slideRemain = slideInterval;
       // activeChannel_span.innerText = eventIdx;
     [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.add('transparent') });
       noise.classList.add('show-media');
@@ -137,7 +138,7 @@
         nextSlide_single();
         looper = setInterval(function() {
           nextSlide_single();
-        }, 5000);
+        }, slideInterval);
       }, slideRemain);
       
       

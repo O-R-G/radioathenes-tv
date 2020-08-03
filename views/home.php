@@ -61,8 +61,9 @@
   var looper,
       looper_resume, 
       clearCenterMessage;
+  var slideInterval = 5000;
   var slideBegin;
-  var slideRemain = 4000;
+  var slideRemain = slideInterval;
   var slidePlaying = false;
   // var events_ids_to_orders
   // loader
@@ -84,9 +85,6 @@
           preloadImg(eventMediaList, 0, thisId);
 
           loading = false;
-          // if (loadQueue.length > 0) {
-          //   preloadNext();
-          // }
         }
     };
     xhttp.open("GET", "views/getEventMedia.php?id=" + nextEventId, true);
@@ -100,7 +98,7 @@
   for(i = 0; i< eventIdx; i++){
     loadQueue.push(eventIds[i]);
   }
-  eventIdx++; //some hack to jusitify. eventIdx starts from 1.
+  eventIdx++; //some hack to jusitify. eventIdx starts from 1
   preloadNext();
 
   function playPause() {
@@ -122,7 +120,7 @@
         nextSlide();
         looper = setInterval(function() {
           nextSlide();
-        }, 5000);
+        }, slideInterval);
       }, slideRemain);
       
       
@@ -134,7 +132,7 @@
 
     slidePlaying = true;
     slideBegin = Date.now();
-    slideRemain = 4000;
+    slideRemain = slideInterval;
 
     if(loopIdx == 0)
       activeChannel_span.innerText = eventIdx;
@@ -197,12 +195,12 @@
           current_event_img_caption = event_img_caption[eventIdx];
           event_img[(loopIdx % 2)].src = current_event_img_src[loopIdx];
           event_caption_span[(loopIdx % 2)].innerText = current_event_img_caption[loopIdx];
-          if(load_ending - load_starting > 4000){
+          if(load_ending - load_starting > slideInterval){
             nextSlide();
           }
           looper = setInterval(function() {
             nextSlide();
-          }, 4000);
+          }, slideInterval);
 
         }
       });
