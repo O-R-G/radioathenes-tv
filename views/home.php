@@ -242,10 +242,13 @@
   
 })();
 var body = document.body;
-window.addEventListener('resize', function(){
+if(window.innerWidth < 500){
+  window.addEventListener('resize', function(){
   if(window.innerWidth > window.innerHeight)
     body.requestFullscreen();
   else
     Document.exitFullscreen();
-});
+  });
+}
+
 </script>
