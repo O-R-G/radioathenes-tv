@@ -2,14 +2,16 @@ var noise = document.getElementById('noise');
 var activeChannel = document.getElementById('active-channel');
 var events = document.getElementsByClassName('event');
 var looper = null;
-
+var body = document.body;
 document.getElementById('cc').onclick = hideShowCaptions;
 
 activeChannel.onclick = function() {
   if (document.getElementById('picker').style.display == 'block') {
+    body.classList.remove('viewing_menu');
       document.getElementById('picker').style.display = 'none';
   } else {
-    document.getElementById('picker').style.display = 'block';
+    body.classList.add('viewing_menu');
+    document.getElementById('picker').style.display = 'block'; 
   }
 }
 

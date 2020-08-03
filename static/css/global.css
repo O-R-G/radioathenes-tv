@@ -299,6 +299,7 @@ ul:first-child {
   position: fixed;
   z-index: -2;
 }
+
 #credit{
   color: #fff;
   overflow: scroll;
@@ -318,6 +319,18 @@ ul:first-child {
 .credit-section a:hover{
   background-color: #fff;
   color: #00f;
+}
+.viewing_menu #credit{
+  color: #333;
+}
+.viewing_menu .credit-section > div{
+  background-color: #000;
+  /*display: inline-block;*/
+}
+.viewing_menu .credit-section a:link,
+.viewing_menu .credit-section a:visited
+{
+  color: #333;
 }
 
 @media screen and (max-width: 640px) {

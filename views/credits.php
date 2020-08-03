@@ -38,9 +38,8 @@
 <script src="/static/js/global.js"></script>
 <script>
 (function() {
-  var showing = [];
-  var loopIdx = -1; // index of the looper
-
+  var activeChannel_span = document.querySelector('#active-channel span');
+  activeChannel_span.innerText = 'C';
   var noise = document.getElementById('noise');
   var activeChannel = document.getElementById('active-channel');
   var eventName = "<?= $item['name1']  ?>";

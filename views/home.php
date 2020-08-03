@@ -49,7 +49,6 @@
   var eventNames = [<?foreach($events as $event) { echo '"' . $event['name1'] . '", '; }?>]; // array of event names
   var eventLength = eventNames.length;
   var eventIdx = parseInt(eventLength * Math.random());
-  console.log(eventIdx);
   var loadQueue = []; // prevent asynch race conditions
   var loading = false;
 
@@ -59,7 +58,12 @@
   var event_img = document.querySelectorAll('.event img');
   var event_caption_span = document.querySelectorAll('.caption-container span');
   var activeChannel_span = document.querySelector('#active-channel span');
-  var looper;
+  var looper,
+      looper_resume, 
+      clearCenterMessage;
+  var slideBegin;
+  var slideRemain = 4000;
+  var slidePlaying = false;
   // var events_ids_to_orders
   // loader
   function preloadNext() {
@@ -100,23 +104,38 @@
   preloadNext();
 
   function playPause() {
-    if (looper) {
+    if (slidePlaying) {
+      slidePlaying = false;
+      slideRemain = slideRemain - (Date.now() - slideBegin);
       clearInterval(looper);
+      clearTimeout(looper_resume);
+      clearTimeout(clearCenterMessage);
       looper = null;
+      looper_resume = null;
       showCenterMessage('PAUSED', true);
     } else {
+      slidePlaying = true;
+      slideBegin = Date.now();
       showCenterMessage('PLAY', false);
-      setTimeout(hideCenterMessage, 2000);
-
-      nextSlide();
-      looper = setInterval(function() {
+      clearCenterMessage = setTimeout(hideCenterMessage, 2000);
+      looper_resume = setTimeout(function(){
         nextSlide();
-      }, 5000);
+        looper = setInterval(function() {
+          nextSlide();
+        }, 5000);
+      }, slideRemain);
+      
+      
     }
   }
 
 
   function nextSlide(){
+
+    slidePlaying = true;
+    slideBegin = Date.now();
+    slideRemain = 4000;
+
     if(loopIdx == 0)
       activeChannel_span.innerText = eventIdx;
     [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.add('transparent') });
@@ -146,7 +165,7 @@
       current_event_img_src = event_img_src[eventIdx];
       current_event_img_caption = event_img_caption[eventIdx];
   }
-  function preloadImg(imageArray, index, id){
+  function preloadImg(imageArray, index, id = false){
     index = index || 0;
     var this_order = events_ids_to_orders[id];
     var e = imageArray[index];
@@ -158,7 +177,6 @@
     if (imageArray && imageArray.length > index+1) {
       
       img.addEventListener('load', function(){
-        // console.log('load done!');
         preloadImg(imageArray, index + 1, id);
       });
     }
@@ -172,16 +190,13 @@
       load_starting = Date.now();
       img.addEventListener('load', function(){
         ready_count++;
-        console.log(ready_count+'/'+imageArray.length);
         if((ready_count == imageArray.length || ready_count == 10) && !isReady){
-          console.log('ready!');
           load_ending = Date.now();
           isReady = true;
           current_event_img_src = event_img_src[eventIdx];
           current_event_img_caption = event_img_caption[eventIdx];
           event_img[(loopIdx % 2)].src = current_event_img_src[loopIdx];
           event_caption_span[(loopIdx % 2)].innerText = current_event_img_caption[loopIdx];
-          console.log('loading time = '+ (load_ending - load_starting));
           if(load_ending - load_starting > 4000){
             nextSlide();
           }
