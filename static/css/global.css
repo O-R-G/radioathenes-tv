@@ -307,15 +307,9 @@ ul:first-child {
   padding: 70px;
 }
 .credit-section{
-  
-  display: inline-block;
-  /*width: 0;*/
-}
-.credit-section > div{
   background-color: #00f;
-  /*display: inline-block;*/
+  display: inline-block;
 }
-
 .credit-section a:hover{
   background-color: #fff;
   color: #00f;
@@ -323,9 +317,8 @@ ul:first-child {
 .viewing_menu #credit{
   color: #333;
 }
-.viewing_menu .credit-section > div{
+.viewing_menu .credit-section{
   background-color: #000;
-  /*display: inline-block;*/
 }
 .viewing_menu .credit-section a:link,
 .viewing_menu .credit-section a:visited
