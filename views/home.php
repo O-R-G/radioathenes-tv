@@ -182,7 +182,7 @@
       showCenterMessage('CHANNEL '+eventIdx, false);
       centerMessage = setTimeout(function(){
         hideCenterMessage();
-      }, 2000);
+      }, 1800);
     }
     [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.add('transparent') });
     noise.classList.add('show-media');
