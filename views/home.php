@@ -175,14 +175,14 @@
     if(loopIdx == 0){
       console.log('first image');
       activeChannel_span.innerText = eventIdx;
-      this_noise_duration = 2000;
+      this_noise_duration = 2250;
       event_img[(loopIdx % 2)].src = media_current[loopIdx]['url'];
       event_caption_span[(loopIdx % 2)].innerText = media_current[loopIdx]['caption'];
       events[(loopIdx % 2)].classList.remove('show-media');
       showCenterMessage('CHANNEL '+eventIdx, false);
       centerMessage = setTimeout(function(){
         hideCenterMessage();
-      }, 1800);
+      }, 2000);
     }
     [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.add('transparent') });
     noise.classList.add('show-media');
