@@ -67,6 +67,7 @@
   var slideBegin;
   var slideRemain = slideInterval;
   var slidePlaying = false;
+  var beginningDelay = 2000;
 
   function preloadImg_single(imageArray, index){
     var img = new Image ();
@@ -84,12 +85,13 @@
         isReady = true;
         event_img[(loopIdx % 2)].src = media_url_array[loopIdx];
         event_caption_span[(loopIdx % 2)].innerText = media_caption_array[loopIdx];
-        if(load_ending - load_starting > slideInterval){
+        setTimeout(function(){
           nextSlide_single();
-        }
-        looper = setInterval(function() {
-          nextSlide_single();
-        }, slideInterval);
+          looper = setInterval(function() {
+            nextSlide_single();
+          }, slideInterval);
+        }, beginningDelay);
+        
 
       }
     });
@@ -174,6 +176,6 @@
   // }, 5000);
 
   showCenterMessage('Channel ' + activeChannel.getElementsByTagName('span')[0].innerHTML, false);
-  setTimeout(hideCenterMessage, 5250);
+  setTimeout(hideCenterMessage, beginningDelay + 250 );
 })();
 </script>
