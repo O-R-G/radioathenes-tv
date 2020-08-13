@@ -73,3 +73,12 @@ function pickWeightedRandomNoise() {
   }
   noiseGifs[choiceIdx].classList.remove('hidden');
 }
+var body = document.body;
+if(window.innerWidth < 500){
+  window.addEventListener('resize', function(){
+  if(window.innerWidth > window.innerHeight)
+    body.requestFullscreen();
+  else
+    Document.exitFullscreen();
+  });
+}

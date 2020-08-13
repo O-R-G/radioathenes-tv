@@ -1,12 +1,18 @@
 <?
+  $events_num = 1;
   $item = $oo->get($uu->id);
   $media = $oo->media($item['id']);
-  $media_url_array = array();
-  $media_caption_array = array();
+  $media_all = array();
+  $this_media_arr = array();
   foreach($media as $m){
-    $media_url_array[] = m_url($m);
-    $media_caption_array[] = $m['caption'];
+    $this_media_arr[] = array(
+      'url' => m_url($m),
+      'caption' => $m['caption']
+    );
   }
+  $media_all[] = $this_media_arr;
+  // eventOrder = order of event;
+  $eventOrder = $events_ids_to_orders[$item['id']];
 ?>
 <div id="rotate-notice" class="message-full">
   <div>
@@ -33,149 +39,73 @@
       }
       ?>
     </div>
-    <div id = 'event-media-1' class = 'event media'>
-      <img><div class = 'caption-container'><div class = 'caption'><span></span></div></div>
-    </div>
-    <div id = 'event-media-2' class = 'event media'>
-      <img><div class = 'caption-container'><div class = 'caption'><span></span></div></div>
-    </div>
+    <? 
+      foreach($media_all as $key => $media){
+        ?>
+          <div id = '' order = 'single' class = 'event-ctner' >
+            <?
+              foreach($media as $m){
+                ?>
+                  <div id = '' class = 'event media'>
+                    <img src = '' data-src="<?= $m['url']; ?>" alt = "<?= $m['caption']; ?>" event = "">
+                    <div class = 'caption-container'>
+                      <div class = 'caption'><span><?= $m['caption']; ?></span></div>
+                    </div>
+                  </div>
+                <?
+              }
+            ?>
+          </div>
+        <?
+      }
+    ?>
   </div>
 </div>
 
 <script src="/static/js/global.js"></script>
+<script src="/static/js/slide.js"></script>
 <script>
-  var media_url_array = <?= json_encode($media_url_array); ?>;
-  var media_caption_array = <?= json_encode($media_caption_array); ?>;
-(function() {
-  var showing = [];
-  var loopIdx = 0; // index of the looper
-  
-  var events = document.getElementsByClassName('event');
-  var noise = document.getElementById('noise');
-  var event_img = document.querySelectorAll('.event img');
-  var event_caption_span = document.querySelectorAll('.caption-container span');
-  var activeChannel = document.getElementById('active-channel');
-  var activeChannel_span = document.querySelector('#active-channel span');
-  var eventIdx = events_ids_to_orders[<?= $item['id']; ?>];
-  activeChannel_span.innerText = eventIdx;
-  var looper,
-      looper_resume, 
-      clearCenterMessage;
+  var media_all = <? echo json_encode($media_all); ?>;
+  eventLength = media_all.length;
+
+  var eventOrder = <?= $eventOrder; ?>;
+  var isSingleEvent = true;
   var ready_count = 0;
-  var isReady = false;
-  var slideInterval = 5000;
-  var slideBegin;
-  var slideRemain = slideInterval;
-  var slidePlaying = false;
-  var beginningDelay = 2000;
+(function() {
 
-  function preloadImg_single(imageArray, index){
-    var img = new Image ();
-    if (imageArray && imageArray.length > index+1) {
-      img.addEventListener('load', function(){
-        preloadImg_single(imageArray, index + 1);
-      });
-    }
+  // preload images with progressive loading
+  let imagesToLoad = document.querySelectorAll('img[data-src]');
 
-    load_starting = Date.now();
-    img.addEventListener('load', function(){
-      ready_count++;
-      if((ready_count == imageArray.length || ready_count == 10) && !isReady){
-        load_ending = Date.now();
-        isReady = true;
-        event_img[(loopIdx % 2)].src = media_url_array[loopIdx];
-        event_caption_span[(loopIdx % 2)].innerText = media_caption_array[loopIdx];
+  const loadImages = (image) => {
+    image.setAttribute('src', image.getAttribute('data-src'));
+
+    image.onload = () => {
+      // init looper if 10 images has been loaded
+      console.log(events.length);
+      console.log(ready_count);
+      if( (ready_count >= 10 || ready_count == events.length - 1) && !looper_hasStarted){
+        looper_hasStarted = true;
         setTimeout(function(){
-          nextSlide_single();
+          current_event_order = eventOrder;
+          activeChannel_span.innerText = current_event_order;
+          nextSlide();
           looper = setInterval(function() {
-            nextSlide_single();
+            nextSlide();
           }, slideInterval);
         }, beginningDelay);
-        
-
       }
-    });
-    img.src = media_url_array[index];
-  }
+      else{
+        ready_count++;
+      }
+      image.removeAttribute('data-src');
+    };
+  };
 
-  preloadImg_single(media_url_array, 0);
+  imagesToLoad.forEach((img) => {
+    loadImages(img);
+  });
 
-  function nextSlide_single(){
-    slidePlaying = true;
-    slideBegin = Date.now();
-    slideRemain = slideInterval;
-      // activeChannel_span.innerText = eventIdx;
-    [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.add('transparent') });
-      noise.classList.add('show-media');
-      pickWeightedRandomNoise();
-    setTimeout(function() {
-      // show current
-      noise.classList.remove('show-media');
-      events[(loopIdx % 2)].classList.add('show-media');
-      [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.remove('transparent') });
-
-      loopIdx++;
-      
-      events[(loopIdx % 2)].classList.remove('show-media');
-      event_img[(loopIdx % 2)].src = media_url_array[loopIdx % media_url_array.length];
-      event_caption_span[(loopIdx % 2)].innerText = media_caption_array[loopIdx % media_url_array.length];
-    }, Math.random()*500 + 125);
-  }
-  function playPause() {
-    if (slidePlaying) {
-      slidePlaying = false;
-      slideRemain = slideRemain - (Date.now() - slideBegin);
-      clearInterval(looper);
-      clearTimeout(looper_resume);
-      clearTimeout(clearCenterMessage);
-      looper = null;
-      looper_resume = null;
-      showCenterMessage('PAUSED', true);
-    } else {
-      slidePlaying = true;
-      slideBegin = Date.now();
-      showCenterMessage('PLAY', false);
-      clearCenterMessage = setTimeout(hideCenterMessage, 2000);
-      looper_resume = setTimeout(function(){
-        nextSlide_single();
-        looper = setInterval(function() {
-          nextSlide_single();
-        }, slideInterval);
-      }, slideRemain);
-      
-      
-    }
-  }
-
-  document.getElementById('container').onclick = playPause;
-
-  // goes to an index with noise transition
-  function gotoIndex(idx) {
-    if (loopIdx != -1) {
-      showing.forEach(function(e) {
-        e.classList.remove('show-media');
-      });
-      showing = [];
-      [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.add('transparent') });
-      noise.classList.add('show-media');
-      pickWeightedRandomNoise();
-    }
-    setTimeout(function() {
-      noise.classList.remove('show-media');
-      loopIdx = idx;
-      events[loopIdx%events.length].classList.add('show-media');
-      [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.remove('transparent') });
-      showing.push(events[(loopIdx)%events.length]);
-
-    }, Math.random()*500 + 125);
-  }
-
-  // runs the loop
-  // var looper = setInterval(function() {
-  //   gotoIndex(loopIdx+1);
-  // }, 5000);
-
-  showCenterMessage('Channel ' + activeChannel.getElementsByTagName('span')[0].innerHTML, false);
+  showCenterMessage('Channel ' + eventOrder, false);
   setTimeout(hideCenterMessage, beginningDelay + 250 );
 })();
 </script>
