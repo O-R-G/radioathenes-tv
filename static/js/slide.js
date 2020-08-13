@@ -39,6 +39,10 @@ function nextSlide(){
     loopIdx++;
     events_img[loopIdx%2].src = current_media[loopIdx]['url'];
     events_caption[loopIdx%2].innerText = current_media[loopIdx]['caption'];
+    if(current_media.length > 1){
+      events_img[(loopIdx+1)%2].src = current_media[loopIdx+1]['url'];
+      events_caption[(loopIdx+1)%2].innerText = current_media[loopIdx+1]['caption'];
+    }
     events[loopIdx%2].classList.add('show-media');
     [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.remove('transparent') });
   }
@@ -52,6 +56,11 @@ function nextSlide(){
     else{
       activeChannel_span.innerText = '';
     }
+    if(loopIdx <= current_media.length-2){
+      events_img[(loopIdx+1)%2].src = current_media[loopIdx+1]['url'];
+      events_caption[(loopIdx+1)%2].innerText = current_media[loopIdx+1]['caption'];
+    }
+    
     [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.add('transparent') });
     noise.classList.add('show-media');
     pickWeightedRandomNoise();
