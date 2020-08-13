@@ -104,6 +104,6 @@
   });
 
   showCenterMessage('Channel ' + eventOrder, false);
-  setTimeout(hideCenterMessage, beginningDelay + 250 );
+  setTimeout(hideCenterMessage, 2000 );
 })();
 </script>

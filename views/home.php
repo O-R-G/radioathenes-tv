@@ -94,6 +94,7 @@
   var ready_count = 0;
   var eventIdx = 0;
   var isSingleEvent = false;
+  var eventOrder = <?= $eventOrder; ?> + 1;
   
 (function() {
 
@@ -123,5 +124,7 @@
   imagesToLoad.forEach((img) => {
     loadImages(img);
   });
+  showCenterMessage('Channel ' + eventOrder, false);
+  setTimeout(hideCenterMessage, 2000 );
 })();
 </script>
