@@ -11,7 +11,7 @@ var current_event_order;
 
 
 var beginningDelay = 1500;
-var slideInterval = 1000;
+var slideInterval = 5000;
 var slideBegin;
 var slideRemain = slideInterval;
 var loopIdx = -1;
