@@ -37,11 +37,10 @@ $nav = $oo->nav($uu->ids);
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="description" content= "Radioathenes, Radioathenes, <?= $title; ?>" >
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link rel="stylesheet" href="<? echo $host; ?>static/fonts/beeb/stylesheet.css">
 		<link rel="stylesheet" href="<? echo $host; ?>static/css/global.css">
 		<link rel="apple-touch-icon" href="<? echo $host; ?>media/png/touchicon.png" />
-		<!-- <link rel="manifest" href="/static/json/manifest.json"> -->
-		<!-- <script src="static/js/analytics.js"></script> -->
 	</head>
 <body>
