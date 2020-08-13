@@ -5,7 +5,6 @@
   $image_all = array();
   // $eventOrder is order of event - 1;
   $eventOrder = rand(0, $events_num - 1);
-  // $eventOrder = 51;
 
   for($i = $eventOrder; $i < $events_num; $i++){
     $this_id = $events[$i]['id'];

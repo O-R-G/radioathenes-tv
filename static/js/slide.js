@@ -54,7 +54,8 @@ function nextSlide(){
       events_caption[loopIdx%2].innerText = current_media[loopIdx]['caption'];
     }
     else{
-      activeChannel_span.innerText = '';
+      if(!isSingleEvent)
+        activeChannel_span.innerText = '';
     }
     if(loopIdx <= current_media.length-2){
       events_img[(loopIdx+1)%2].src = current_media[loopIdx+1]['url'];
