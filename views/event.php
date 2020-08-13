@@ -11,7 +11,7 @@
     );
   }
   $media_all[] = $this_media_arr;
-  // eventOrder = order of event;
+  // $eventOrder = order of event;
   $eventOrder = $events_ids_to_orders[$item['id']];
 ?>
 <div id="rotate-notice" class="message-full">
