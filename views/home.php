@@ -1,22 +1,28 @@
 <?
   // $events is from menu.pgp
   $events_num = count($events);
-  $media_all = array();
-  // $eventOrder = order of event - 1;
+  $event_all = array();
+  $image_all = array();
+  // $eventOrder is order of event - 1;
   $eventOrder = rand(0, $events_num - 1);
+  // $eventOrder = 51;
 
   for($i = $eventOrder; $i < $events_num; $i++){
     $this_id = $events[$i]['id'];
     $this_media = $oo->media($this_id);
     $this_media_arr = array();
+    $this_event_arr = array();
+    $this_event_arr['order'] = $i + 1;
     if ($this_media) {
       foreach($this_media as $m) {
         $this_media_arr[] = array(
           'url' => m_url($m),
           'caption' => $m['caption']
         );
+        $image_all[] = m_url($m);
       }
-      $media_all[$i+1] = $this_media_arr;
+      $this_event_arr['media'] = $this_media_arr;
+      $event_all[] = $this_event_arr;
     }
   }
   if($eventOrder != 0){
@@ -24,14 +30,18 @@
       $this_id = $events[$i]['id'];
       $this_media = $oo->media($this_id);
       $this_media_arr = array();
+      $this_event_arr = array();
+      $this_event_arr['order'] = $i + 1;
       if ($this_media) {
         foreach($this_media as $m) {
           $this_media_arr[] = array(
             'url' => m_url($m),
             'caption' => $m['caption']
           );
+          $image_all[] = m_url($m);
         }
-        $media_all[$i+1] = $this_media_arr;
+        $this_event_arr['media'] = $this_media_arr;
+        $event_all[] = $this_event_arr;
       }
     }
   }
@@ -62,69 +72,86 @@
       }
       ?>
     </div>
-    <? 
-      foreach($media_all as $key => $media){
-        ?>
-          <div id = 'event-<? echo $key; ?>' order = '<? echo $key; ?>' class = 'event-ctner' >
-            <?
-              foreach($media as $m){
-                ?>
-                  <div id = '' class = 'event media'>
-                    <img src = '' data-src="<?= $m['url']; ?>" alt = "<?= $m['caption']; ?>" event = "<?= $key; ?>">
-                    <div class = 'caption-container'>
-                      <div class = 'caption'><span><?= $m['caption']; ?></span></div>
-                    </div>
-                  </div>
-                <?
-              }
-            ?>
-          </div>
-        <?
-      }
-    ?>
+    <div id = '' class = 'event media'>
+      <img src = "<?= $event_all[0]['media'][0]['url']; ?>" data-src="" alt = "" event = "">
+      <div class = 'caption-container'>
+        <div class = 'caption'><span><?= $event_all[0]['media'][0]['caption']; ?></span></div>
+      </div>
+    </div>
+    <div id = '' class = 'event media'>
+      <img src = "<?= $event_all[0]['media'][1]['url']; ?>" data-src="" alt = "" event = "">
+      <div class = 'caption-container'>
+        <div class = 'caption'><span><?= $event_all[0]['media'][1]['caption']; ?></span></div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script src="/static/js/global.js"></script>
 <script src="/static/js/slide.js"></script>
 <script>
-  var media_all = <? echo json_encode($media_all); ?>;
-  eventLength = media_all.length;
-
-  var ready_count = 0;
-  var eventIdx = 0;
+  var event_all = <? echo json_encode($event_all); ?>;
+  eventLength = event_all.length;
+  current_media = event_all[0]['media'];
+  var image_all = <? echo json_encode($image_all); ?>;
   var isSingleEvent = false;
   var eventOrder = <?= $eventOrder; ?> + 1;
-  
+  var preloadIdx = 0;
+
 (function() {
 
-  let imagesToLoad = document.querySelectorAll('img[data-src]');
+  // let imagesToLoad = document.querySelectorAll('img[data-src]');
 
-  const loadImages = (image) => {
-    image.setAttribute('src', image.getAttribute('data-src'));
-    image.onload = () => {
-      // init looper if 10 images or all the images have been loaded
-      if( (ready_count >= 10 || ready_count == events.length) && !looper_hasStarted){
+  // const loadImages = (image) => {
+  //   image.setAttribute('src', image.getAttribute('data-src'));
+  //   image.onload = () => {
+  //     // init looper if 10 images or all the images have been loaded
+  //     if( (ready_count >= 10 || ready_count == events.length) && !looper_hasStarted){
+  //       looper_hasStarted = true;
+  //       setTimeout(function(){
+  //         current_event_order = event_ctner[eventIdx].getAttribute('order');
+  //         activeChannel_span.innerText = current_event_order;
+  //         nextSlide();
+  //         looper = setInterval(function() {
+  //           nextSlide();
+  //         }, slideInterval);
+  //       }, beginningDelay);
+  //     }
+  //     else{
+  //       ready_count++;
+  //     }
+  //     image.removeAttribute('data-src');
+  //   };
+  // };
+  // imagesToLoad.forEach((img) => {
+  //   loadImages(img);
+  // });
+
+  var img_preload = new Image();
+
+  function preloadImages(){
+    img_preload.onload = function(){
+      preloadIdx ++; 
+      if(preloadIdx < image_all.length)
+        preloadImages();
+      if((preloadIdx >= 10 || preloadIdx == image_all.length -1 ) && !looper_hasStarted){
         looper_hasStarted = true;
         setTimeout(function(){
-          current_event_order = event_ctner[eventIdx].getAttribute('order');
-          activeChannel_span.innerText = current_event_order;
+          activeChannel_span.innerText = eventOrder;
           nextSlide();
           looper = setInterval(function() {
             nextSlide();
           }, slideInterval);
         }, beginningDelay);
+        setTimeout(hideCenterMessage, beginningDelay - 250 );
       }
-      else{
-        ready_count++;
-      }
-      image.removeAttribute('data-src');
-    };
-  };
-  imagesToLoad.forEach((img) => {
-    loadImages(img);
-  });
+    }
+    img_preload.src = image_all[preloadIdx];
+  }
+
+  preloadImages();
+
   showCenterMessage('Channel ' + eventOrder, false);
-  setTimeout(hideCenterMessage, 2000 );
+  
 })();
 </script>

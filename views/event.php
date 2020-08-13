@@ -2,17 +2,23 @@
   $events_num = 1;
   $item = $oo->get($uu->id);
   $media = $oo->media($item['id']);
-  $media_all = array();
+  $eventOrder = $events_ids_to_orders[$item['id']];
+
+  $event_all = array();
+  $image_all = array();
+  $this_event = array('order'=>$eventOrder);
   $this_media_arr = array();
   foreach($media as $m){
     $this_media_arr[] = array(
       'url' => m_url($m),
       'caption' => $m['caption']
     );
+    $image_all[] = m_url($m);
   }
-  $media_all[] = $this_media_arr;
+  $this_event['media'] = $this_media_arr;
+  $event_all[] = $this_event;
   // $eventOrder = order of event;
-  $eventOrder = $events_ids_to_orders[$item['id']];
+  
 ?>
 <div id="rotate-notice" class="message-full">
   <div>
@@ -39,71 +45,59 @@
       }
       ?>
     </div>
-    <? 
-      foreach($media_all as $key => $media){
-        ?>
-          <div id = '' order = 'single' class = 'event-ctner' >
-            <?
-              foreach($media as $m){
-                ?>
-                  <div id = '' class = 'event media'>
-                    <img src = '' data-src="<?= $m['url']; ?>" alt = "<?= $m['caption']; ?>" event = "">
-                    <div class = 'caption-container'>
-                      <div class = 'caption'><span><?= $m['caption']; ?></span></div>
-                    </div>
-                  </div>
-                <?
-              }
-            ?>
-          </div>
-        <?
-      }
-    ?>
+    <div id = '' class = 'event media'>
+      <img src = "<?= $event_all[0]['media'][0]['url']; ?>" data-src="" alt = "" event = "">
+      <div class = 'caption-container'>
+        <div class = 'caption'><span><?= $event_all[0]['media'][0]['caption']; ?></span></div>
+      </div>
+    </div>
+    <div id = '' class = 'event media'>
+      <img src = "<?= $event_all[0]['media'][1]['url']; ?>" data-src="" alt = "" event = "">
+      <div class = 'caption-container'>
+        <div class = 'caption'><span><?= $event_all[0]['media'][1]['caption']; ?></span></div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script src="/static/js/global.js"></script>
 <script src="/static/js/slide.js"></script>
 <script>
-  var media_all = <? echo json_encode($media_all); ?>;
-  eventLength = media_all.length;
-
-  var eventOrder = <?= $eventOrder; ?>;
+  var event_all = <? echo json_encode($event_all); ?>;
+  eventLength = event_all.length;
+  current_media = event_all[0]['media'];
+  var image_all = <? echo json_encode($image_all); ?>;
   var isSingleEvent = true;
-  var ready_count = 0;
+  var eventOrder = <?= $eventOrder; ?>;
+  var preloadIdx = 0;
+
 (function() {
 
-  // preload images with progressive loading
-  let imagesToLoad = document.querySelectorAll('img[data-src]');
-  const loadImages = (image) => {
-    image.setAttribute('src', image.getAttribute('data-src'));
-    image.onload = () => {
-      // init looper if 10 images has been loaded
-      console.log(events.length);
-      console.log(ready_count);
-      if( (ready_count >= 10 || ready_count == events.length - 1) && !looper_hasStarted){
+  var img_preload = new Image();
+
+  function preloadImages(){
+    img_preload.onload = function(){
+      preloadIdx ++; 
+      if(preloadIdx < image_all.length)
+        preloadImages();
+      if((preloadIdx >= 10 || preloadIdx == events.length) && !looper_hasStarted){
         looper_hasStarted = true;
         setTimeout(function(){
-          current_event_order = eventOrder;
-          activeChannel_span.innerText = current_event_order;
+          activeChannel_span.innerText = eventOrder;
           nextSlide();
           looper = setInterval(function() {
             nextSlide();
           }, slideInterval);
         }, beginningDelay);
+        setTimeout(hideCenterMessage, beginningDelay - 250 );
       }
-      else{
-        ready_count++;
-      }
-      image.removeAttribute('data-src');
-    };
-  };
+    }
+    img_preload.src = image_all[preloadIdx];
+  }
 
-  imagesToLoad.forEach((img) => {
-    loadImages(img);
-  });
+  preloadImages();
 
   showCenterMessage('Channel ' + eventOrder, false);
-  setTimeout(hideCenterMessage, 2000 );
+  // setTimeout(hideCenterMessage, 2000 );
 })();
 </script>
