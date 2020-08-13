@@ -19,9 +19,6 @@ var looper,
 
 var eventLength = 0;
 
-
-
-
 function nextSlide(){
   slidePlaying = true;
   slideBegin = Date.now();

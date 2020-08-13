@@ -5,8 +5,6 @@
   // $eventOrder = order of event - 1;
   $eventOrder = rand(0, $events_num - 1);
 
-  $eventOrder = 29;
-
   for($i = $eventOrder; $i < $events_num; $i++){
     $this_id = $events[$i]['id'];
     $this_media = $oo->media($this_id);
@@ -37,8 +35,8 @@
       }
     }
   }
-  
-  // media_all = array of arrays (url, caption) in chronological order;  
+  // media_all = array of arrays (url, caption) in chronological order, starting with a randomly picked event;  
+
 ?>
 <div id="rotate-notice" class="message-full">
   <div class="">
@@ -104,8 +102,7 @@
   const loadImages = (image) => {
     image.setAttribute('src', image.getAttribute('data-src'));
     image.onload = () => {
-      // init looper if 10 images has been loaded
-
+      // init looper if 10 images or all the images have been loaded
       if( (ready_count >= 10 || ready_count == events.length) && !looper_hasStarted){
         looper_hasStarted = true;
         setTimeout(function(){
@@ -117,18 +114,14 @@
           }, slideInterval);
         }, beginningDelay);
       }
-      
-      ready_count++;
-      // console.log(ready_count+'th image is loaded');
+      else{
+        ready_count++;
+      }
       image.removeAttribute('data-src');
     };
   };
-
   imagesToLoad.forEach((img) => {
     loadImages(img);
   });
-
 })();
-
-
 </script>

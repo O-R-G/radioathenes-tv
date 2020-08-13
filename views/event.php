@@ -75,10 +75,8 @@
 
   // preload images with progressive loading
   let imagesToLoad = document.querySelectorAll('img[data-src]');
-
   const loadImages = (image) => {
     image.setAttribute('src', image.getAttribute('data-src'));
-
     image.onload = () => {
       // init looper if 10 images has been loaded
       console.log(events.length);
