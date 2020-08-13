@@ -105,6 +105,11 @@ function nextEvent(){
   [].forEach.call(document.getElementsByClassName('hideable'), function(e) { e.classList.add('transparent') });
   noise.classList.add('show-media');
 
+  setTimeout(function(){
+    events_img[0].src = current_media[0]['url'];
+    events_caption[0].innerText = current_media[0]['caption'];
+  }, 0);
+
   showCenterMessage('CHANNEL '+current_event_order, false);
   centerMessage = setTimeout(function(){
     hideCenterMessage();
