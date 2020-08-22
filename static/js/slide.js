@@ -27,7 +27,7 @@ var eventLength = 0;
 
 function nextSlide(){
   slidePlaying = true;
-  slideBegin = Date.now();
+  // slideBegin = Date.now();
   slideRemain = slideInterval;
   events[0].classList.remove('show-media');
   events[1].classList.remove('show-media');
@@ -96,7 +96,6 @@ function nextEvent(){
   clearInterval(looper);
   loopIdx = -1;
   eventIdx++;
-  console.log(eventIdx);
   if(eventIdx > eventLength - 1)
     eventIdx = 0;
   current_media = event_all[eventIdx]['media'];
@@ -127,7 +126,7 @@ function nextEvent(){
 function playPause() {
   if (slidePlaying) {
     slidePlaying = false;
-    slideRemain = slideRemain - (Date.now() - slideBegin);
+    // slideRemain = slideRemain - (Date.now() - slideBegin);
     clearInterval(looper);
     clearTimeout(looper_resume);
     clearTimeout(centerMessage);
@@ -136,7 +135,7 @@ function playPause() {
     showCenterMessage('PAUSED', true);
   } else {
     slidePlaying = true;
-    slideBegin = Date.now();
+    // slideBegin = Date.now();
     showCenterMessage('PLAY', false);
     centerMessage = setTimeout(hideCenterMessage, 2000);
     looper_resume = setTimeout(function(){
@@ -144,7 +143,7 @@ function playPause() {
       looper = setInterval(function() {
         nextSlide();
       }, slideInterval);
-    }, slideRemain);
+    }, 1500);
   }
 }
 
