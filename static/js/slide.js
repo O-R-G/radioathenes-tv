@@ -12,8 +12,8 @@ var current_event_order;
 
 var beginningDelay = 1500;
 var slideInterval = 5000;
-var slideBegin;
-var slideRemain = slideInterval;
+// var slideBegin;
+// var slideRemain = slideInterval;
 var loopIdx = -1;
 var eventIdx = 0;
 
@@ -28,7 +28,7 @@ var eventLength = 0;
 function nextSlide(){
   slidePlaying = true;
   // slideBegin = Date.now();
-  slideRemain = slideInterval;
+  // slideRemain = slideInterval;
   events[0].classList.remove('show-media');
   events[1].classList.remove('show-media');
 
