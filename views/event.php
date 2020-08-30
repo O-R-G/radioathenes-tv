@@ -20,6 +20,9 @@
   // $eventOrder = order of event;
   
 ?>
+<script>
+  
+</script>
 <div id="rotate-notice" class="message-full">
   <div>
     Please Rotate Your Device.
@@ -78,9 +81,10 @@
   function preloadImages(){
     img_preload.onload = function(){
       preloadIdx ++; 
+      console.log(preloadIdx, image_all.length);
       if(preloadIdx < image_all.length)
         preloadImages();
-      if((preloadIdx >= 10 || preloadIdx == events.length) && !looper_hasStarted){
+      if((preloadIdx >= 10 || preloadIdx == image_all.length) && !looper_hasStarted){
         looper_hasStarted = true;
         setTimeout(function(){
           activeChannel_span.innerText = eventOrder;
