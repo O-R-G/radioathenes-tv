@@ -20,9 +20,6 @@
   // $eventOrder = order of event;
   
 ?>
-<script>
-  
-</script>
 <div id="rotate-notice" class="message-full">
   <div>
     Please Rotate Your Device.
@@ -49,13 +46,13 @@
       ?>
     </div>
     <div id = '' class = 'event media'>
-      <img src = "<?= $event_all[0]['media'][0]['url']; ?>" data-src="" alt = "" event = "">
+      <img src = "<?= $event_all[0]['media'][0]['url']; ?>">
       <div class = 'caption-container'>
         <div class = 'caption'><span><?= $event_all[0]['media'][0]['caption']; ?></span></div>
       </div>
     </div>
     <div id = '' class = 'event media'>
-      <img src = "<?= $event_all[0]['media'][1]['url']; ?>" data-src="" alt = "" event = "">
+      <img src = "<?= $event_all[0]['media'][1]['url']; ?>">
       <div class = 'caption-container'>
         <div class = 'caption'><span><?= $event_all[0]['media'][1]['caption']; ?></span></div>
       </div>
@@ -81,7 +78,6 @@
   function preloadImages(){
     img_preload.onload = function(){
       preloadIdx ++; 
-      console.log(preloadIdx, image_all.length);
       if(preloadIdx < image_all.length)
         preloadImages();
       if((preloadIdx >= 10 || preloadIdx == image_all.length) && !looper_hasStarted){
