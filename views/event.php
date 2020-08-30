@@ -45,7 +45,7 @@
       }
       ?>
     </div>
-    <div id = '' class = 'event media'>
+    <!-- <div id = '' class = 'event media'>
       <img src = "<?= $event_all[0]['media'][0]['url']; ?>">
       <div class = 'caption-container'>
         <div class = 'caption'><span><?= $event_all[0]['media'][0]['caption']; ?></span></div>
@@ -56,7 +56,7 @@
       <div class = 'caption-container'>
         <div class = 'caption'><span><?= $event_all[0]['media'][1]['caption']; ?></span></div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
 
@@ -94,7 +94,7 @@
     }
     img_preload.src = image_all[preloadIdx];
   }
-
+  init(sContainer, current_media);
   preloadImages();
 
   showCenterMessage('Channel ' + eventOrder, false);

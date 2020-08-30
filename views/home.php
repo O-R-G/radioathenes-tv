@@ -4,8 +4,8 @@
   $event_all = array();
   $image_all = array();
   // $eventOrder is order of event - 1;
-  // $eventOrder = rand(0, $events_num - 1);
-  $eventOrder = 52;
+  $eventOrder = rand(0, $events_num - 1);
+
   for($i = $eventOrder; $i < $events_num; $i++){
     $this_id = $events[$i]['id'];
     $this_media = $oo->media($this_id);
