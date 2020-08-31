@@ -97,9 +97,8 @@
     }
     img_preload.src = image_all[preloadIdx];
   }
-  init(sContainer, current_media);
   preloadImages();
-
+  init(sContainer, current_media);
   showCenterMessage('Channel ' + eventOrder, false);
   // setTimeout(hideCenterMessage, 2000 );
 })();
