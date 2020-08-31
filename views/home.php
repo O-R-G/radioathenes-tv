@@ -4,8 +4,8 @@
   $event_all = array();
   $image_all = array();
   // $eventOrder is order of event - 1;
-  $eventOrder = rand(0, $events_num - 1);
-
+  // $eventOrder = rand(0, $events_num - 1);
+  $eventOrder = 47;
   for($i = $eventOrder; $i < $events_num; $i++){
     $this_id = $events[$i]['id'];
     $this_media = $oo->media($this_id);
@@ -92,65 +92,45 @@
   var event_all = <? echo json_encode($event_all); ?>;
   eventLength = event_all.length;
   current_media = event_all[0]['media'];
+  next_media = event_all[1]['media']
   var image_all = <? echo json_encode($image_all); ?>;
   var isSingleEvent = false;
   var eventOrder = <?= $eventOrder; ?> + 1;
-  var preloadIdx = 0;
 
-(function() {
 
-  // let imagesToLoad = document.querySelectorAll('img[data-src]');
-
-  // const loadImages = (image) => {
-  //   image.setAttribute('src', image.getAttribute('data-src'));
-  //   image.onload = () => {
-  //     // init looper if 10 images or all the images have been loaded
-  //     if( (ready_count >= 10 || ready_count == events.length) && !looper_hasStarted){
-  //       looper_hasStarted = true;
-  //       setTimeout(function(){
-  //         current_event_order = event_ctner[eventIdx].getAttribute('order');
-  //         activeChannel_span.innerText = current_event_order;
-  //         nextSlide();
-  //         looper = setInterval(function() {
-  //           nextSlide();
-  //         }, slideInterval);
-  //       }, beginningDelay);
-  //     }
-  //     else{
-  //       ready_count++;
-  //     }
-  //     image.removeAttribute('data-src');
-  //   };
-  // };
-  // imagesToLoad.forEach((img) => {
-  //   loadImages(img);
-  // });
-
-  var img_preload = new Image();
-
-  function preloadImages(){
-    img_preload.onload = function(){
-      preloadIdx ++; 
-      if(preloadIdx < image_all.length)
-        preloadImages();
-      if((preloadIdx >= 10 || preloadIdx == image_all.length -1 ) && !looper_hasStarted){
-        looper_hasStarted = true;
-        setTimeout(function(){
-          activeChannel_span.innerText = eventOrder;
-          nextSlide();
-          looper = setInterval(function() {
-            nextSlide();
-          }, slideInterval);
-        }, beginningDelay);
-        setTimeout(hideCenterMessage, beginningDelay - 250 );
-      }
-    }
-    img_preload.src = image_all[preloadIdx];
-  }
-  init(sContainer, current_media);
-  preloadImages();
-
-  showCenterMessage('Channel ' + eventOrder, false);
   
-})();
+
+function preloadImages(preload_idx, media_set){
+  var img_preload = new Image();
+  img_preload.onload = function(){
+    preload_idx++; 
+    if(preload_idx < media_set.length){
+      console.log('done loading preload_idx = '+preload_idx);
+      preloadImages(preload_idx, media_set);
+    }
+    else
+      console.log('finish preloading this event: '+media_set.length);
+    if((preload_idx >= 5 || preload_idx == media_set.length -1 ) && !looper_hasStarted){
+      looper_hasStarted = true;
+      init(sContainer, current_media);
+      setTimeout(function(){
+        activeChannel_span.innerText = eventOrder;
+        nextSlide();
+        looper = setInterval(function() {
+          nextSlide();
+        }, slideInterval);
+      }, beginningDelay);
+      setTimeout(hideCenterMessage, beginningDelay - 250 );
+    }
+  }
+  img_preload.src = media_set[preload_idx]['url'];
+}
+console.log('current_media = ');
+console.log(current_media.length);
+preloadImages(0, current_media);
+console.log('next_media = ');
+console.log(next_media.length);
+preloadImages(0, next_media);
+showCenterMessage('Channel ' + eventOrder, false);
+  
 </script>

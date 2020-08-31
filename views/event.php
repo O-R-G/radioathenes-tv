@@ -70,18 +70,17 @@
   var isSingleEvent = true;
   var eventOrder = <?= $eventOrder; ?>;
   
-
 (function() {
 
-  var img_preload = new Image();
+  
 
-  function preloadImages(){
+  function preloadImages(preload_idx, media_set){
+    var img_preload = new Image();
     img_preload.onload = function(){
-      preloadIdx++; 
-      console.log('preloadIdx = '+preloadIdx);
-      if(preloadIdx < image_all.length)
-        preloadImages();
-      if((preloadIdx >= 5 || preloadIdx == image_all.length) && !looper_hasStarted){
+      preload_idx++; 
+      if(preload_idx < media_set.length)
+        preloadImages(preload_idx, media_set);
+      if((preload_idx >= 5 || preload_idx == media_set.length) && !looper_hasStarted){
         console.log('preload ready...');
         looper_hasStarted = true;
         init(sContainer, current_media);
@@ -96,9 +95,9 @@
         setTimeout(hideCenterMessage, beginningDelay - 250 );
       }
     }
-    img_preload.src = image_all[preloadIdx];
+    img_preload.src = media_set[preload_idx]['url'];
   }
-  preloadImages();
+  preloadImages(0, current_media);
   
   showCenterMessage('Channel ' + eventOrder, false);
   // setTimeout(hideCenterMessage, 2000 );
