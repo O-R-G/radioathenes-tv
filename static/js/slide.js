@@ -155,6 +155,7 @@ function playPause() {
 }
 function init(ctner, current_m) {
   for(i = 0 ; i < current_m.length ; i++){
+    console.log('init '+i+'th div');
     var thisEvent = document.createElement('DIV');
     thisEvent.className = 'event media';
     var thisImg = document.createElement('IMG');

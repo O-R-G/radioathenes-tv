@@ -77,7 +77,8 @@
 
   function preloadImages(){
     img_preload.onload = function(){
-      preloadIdx ++; 
+      preloadIdx++; 
+      console.log('preloadIdx = '+preloadIdx);
       if(preloadIdx < image_all.length)
         preloadImages();
       if((preloadIdx >= 10 || preloadIdx == image_all.length) && !looper_hasStarted){

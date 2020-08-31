@@ -19,7 +19,9 @@ if ($uri[1] == "events") {
   require_once("views/all.php");
 } elseif($uri[1] == "credits") {
   require_once("views/credits.php");
-} else {
+} elseif($uri[1]=='inspect') {
+  require_once("views/inspect.php");
+}else {
   require_once("views/home.php");
 }
 require_once("views/foot.php");
