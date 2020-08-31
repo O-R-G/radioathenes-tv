@@ -69,7 +69,7 @@
   var image_all = <? echo json_encode($image_all); ?>;
   var isSingleEvent = true;
   var eventOrder = <?= $eventOrder; ?>;
-  var preloadIdx = 0;
+  
 
 (function() {
 
@@ -84,6 +84,7 @@
       if((preloadIdx >= 5 || preloadIdx == image_all.length) && !looper_hasStarted){
         console.log('preload ready...');
         looper_hasStarted = true;
+        init(sContainer, current_media);
         setTimeout(function(){
           activeChannel_span.innerText = eventOrder;
           console.log('starting slides');
@@ -98,7 +99,7 @@
     img_preload.src = image_all[preloadIdx];
   }
   preloadImages();
-  init(sContainer, current_media);
+  
   showCenterMessage('Channel ' + eventOrder, false);
   // setTimeout(hideCenterMessage, 2000 );
 })();
