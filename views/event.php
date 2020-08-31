@@ -81,7 +81,7 @@
       console.log('preloadIdx = '+preloadIdx);
       if(preloadIdx < image_all.length)
         preloadImages();
-      if((preloadIdx >= 10 || preloadIdx == image_all.length) && !looper_hasStarted){
+      if((preloadIdx >= 5 || preloadIdx == image_all.length) && !looper_hasStarted){
         looper_hasStarted = true;
         setTimeout(function(){
           activeChannel_span.innerText = eventOrder;
