@@ -82,9 +82,11 @@
       if(preloadIdx < image_all.length)
         preloadImages();
       if((preloadIdx >= 5 || preloadIdx == image_all.length) && !looper_hasStarted){
+        console.log('preload ready...');
         looper_hasStarted = true;
         setTimeout(function(){
           activeChannel_span.innerText = eventOrder;
+          console.log('starting slides');
           nextSlide();
           looper = setInterval(function() {
             nextSlide();
