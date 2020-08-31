@@ -13,6 +13,7 @@ var beginningDelay = 1500;
 var slideInterval = 5000;
 var slideBegin;
 var slideRemain = slideInterval;
+var preloadIdx = 0;
 var loopIdx = -1;
 var eventIdx = 0;
 
