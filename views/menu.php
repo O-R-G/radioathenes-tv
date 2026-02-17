@@ -2,7 +2,7 @@
 	$events = $oo->children(getEventsID($oo, $root));
 	usort($events, "date_sort");
 	$item = $oo->get($uu->id);
-	$media = $oo->media($item['id']);
+	// $media = $oo->media($item['id']);
 	$events_ids_to_orders = array();
 
 	$credit_id = end($oo->urls_to_ids(array('system', 'credits')));
