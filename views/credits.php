@@ -1,4 +1,4 @@
-<?
+<?php
   // $events = $oo->children(getEventsID($oo, $root));
   // usort($events, "date_sort");
 

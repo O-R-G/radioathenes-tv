@@ -20,16 +20,16 @@ $siteMeta = new SiteMeta($db, ['system', 'site-meta']);
 // $rr = new Request();
 
 // self
-if($uu->id)
-	$item = $oo->get($uu->id);
-else
-	$item = $oo->get(0);
+$id = $uu->id ?? 0;
+$ids = $id === 0 ? [] : $uu->ids;
+$item = $oo->get($id);
 // $name = ltrim(strip_tags($item["name1"]), ".");
 
 // document title
-$item = $oo->get($uu->id);
+// var_dump($uu->id);
+// $item = $oo->get($uu->id);
 // $title = $item["name1"];
-$nav = $oo->nav($uu->ids);
+$nav = $oo->nav($ids);
 
 ?>
 <!DOCTYPE html>
