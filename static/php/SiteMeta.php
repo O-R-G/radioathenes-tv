@@ -11,6 +11,7 @@
 
 class SiteMeta{
     public $url = '';
+    public $site_title = '';
     public $title = '';
     public $keywords = '';
     public $description = '';
@@ -19,14 +20,17 @@ class SiteMeta{
     public $preview_twitter = '';
     public $gtm_head = '';
     public $gtm_body = '';
+    
     private $db;
     private $path;
+    private $override;
 
-    function __construct($db, $path) {
+    function __construct($db, $path, $override=[]) {
         $this->db = $db;
         $this->path = $path;
         $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
         $this->url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $this->override = $override;
         $record = $this->getRecord();
         $this->getValues($record);
     }
@@ -63,9 +67,9 @@ class SiteMeta{
             AND objects.url = '$record_url_slug'
             GROUP BY objects.id
             LIMIT 1";
-        echo '<pre>';
-        var_dump($sql);
-        echo '</pre>';
+        // echo '<pre>';
+        // var_dump($sql);
+        // echo '</pre>';
         $result = $this->db->query($sql);
         if(!$result) return $result;
 
@@ -88,21 +92,32 @@ class SiteMeta{
                     } 
                 }
             } else if($key === 'title'){
+                $this->site_title = $this->rich2Plain($value);
                 $this->$key = $this->getPageTitle($value);
             } else if(strpos($key, 'gtm_') !== false) {
                 $this->$key = $value ? $this->unescape($value) : $value;
             } else {
-                $this->$key = $value;
+                if(isset($this->override[$key]))
+                    $this->$key = $this->rich2Plain($this->override[$key]);
+                else
+                    $this->$key = $this->rich2Plain($value);
             }
         }
     }
+    public function rich2Plain($rich) {
+        if(strpos($rich, '<') === false)
+            return $rich;
+
+        $output = preg_replace('/<\s*br\s*\/?\s*>/i', ' ', $rich);
+        return strip_tags($output);
+    }
     private function getPageTitle($site_title){
-        global $item;
-        global $uri;
+        // global $item;
+        // global $uri;
         $output = $site_title;
-        if($item && $uri[1]) {
-            $output .= ' / ' . $item['name1'];
-        }
+        // if($item && $uri[1]) {
+        //     $output .= ' / ' . $item['name1'];
+        // }
         return $output;
     }
     private function unescape($str, $br2Nl=true){
