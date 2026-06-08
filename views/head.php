@@ -24,10 +24,10 @@ $id = $uu->id ?? 0;
 $ids = $id === 0 ? [] : $uu->ids;
 $item = $oo->get($id);
 $pageMeta = array();
-if($item['address2']) {
+if(isset($item['address2']) && $item['address2']) {
 	$pageMeta['description'] = $item['address2'];
 }
-if($item['address1']) {
+if(isset($item['address1']) && $item['address1']) {
 	$pageMeta['keywords'] = $item['address1'];
 }
 $siteMeta = new SiteMeta($db, ['system', 'site-meta'], $pageMeta);
