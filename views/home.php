@@ -71,18 +71,6 @@
       }
       ?>
     </div>
-    <!-- <div id = '' class = 'event media'>
-      <img src = "<?= $event_all[0]['media'][0]['url']; ?>">
-      <div class = 'caption-container'>
-        <div class = 'caption'><span><?= $event_all[0]['media'][0]['caption']; ?></span></div>
-      </div>
-    </div>
-    <div id = '' class = 'event media'>
-      <img src = "<?= $event_all[0]['media'][1]['url']; ?>">
-      <div class = 'caption-container'>
-        <div class = 'caption'><span><?= $event_all[0]['media'][1]['caption']; ?></span></div>
-      </div>
-    </div> -->
   </div>
 </div>
 
