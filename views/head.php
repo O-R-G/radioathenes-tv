@@ -17,7 +17,11 @@ $mm = new Media();
 $ww = new Wires();
 $uu = new URL();
 
-// $rr = new Request();
+$schedule_dir = __DIR__ . '/../open-records-generator/schedule/';
+if(file_exists($schedule_dir . 'schedule.php') && file_exists($schedule_dir . 'schedule-functions.php')) {
+	require_once($schedule_dir . 'schedule-functions.php');
+	handleSchedule($schedule_dir . 'schedule.php');
+}
 
 // self
 $id = $uu->id ?? 0;
